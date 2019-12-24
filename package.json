@@ -1,0 +1,40 @@
+{
+  "name": "@baleada/prepare",
+  "version": "0.0.0",
+  "description": "Useful scripts for preparing packages",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "node scripts/prepare.js",
+    "test": "npm run prepare && ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/baleada/prepare.git"
+  },
+  "keywords": [
+    "baleada",
+    "prepare"
+  ],
+  "author": {
+    "name": "Alex Vipond",
+    "email": "hello@alexvipond.dev",
+    "url": "https://alexvipond.dev"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/baleada/prepare/issues"
+  },
+  "homepage": "https://baleada.netlify.com",
+  "devDependencies": {
+    "@nuxtjs/eslint-config": "^1.1.2",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.7.2",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-ava": "^7.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.2.0",
+    "eslint-plugin-nuxt": "^0.4.3",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
+  }
+}
