@@ -3,10 +3,6 @@
   "version": "0.0.0",
   "description": "Useful scripts for preparing packages",
   "main": "index.js",
-  "scripts": {
-    "prepare": "node scripts/prepare.js",
-    "test": "npm run prepare && ava"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://gitlab.com/baleada/prepare.git"
