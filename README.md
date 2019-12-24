@@ -1,3 +1,3 @@
-# `@baleada/listenable-gestures`
+# `@baleada/prepare`
 
-A collection of gesture recognizers that are compatible with Baleada Logic's Listenable class.
+Useful scripts for preparing packages.
