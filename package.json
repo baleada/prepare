@@ -1,8 +1,11 @@
 {
   "name": "@baleada/prepare",
-  "version": "0.1.1",
+  "version": "0.2.10",
   "description": "Useful scripts for preparing packages",
   "main": "index.js",
+  "scripts": {
+    "publish": "node ./scripts/publish.js patch"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://gitlab.com/baleada/prepare.git"

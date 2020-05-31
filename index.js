@@ -1,9 +1,11 @@
-const generateIndex = require('./lib/generateIndex'),
-      empty = require('./lib/empty'),
-      exec = require('./lib/exec')
+const empty = require('./lib/empty.js'),
+      exec = require('./lib/exec.js'),
+      generateIndex = require('./lib/generateIndex.js'),
+      publish = require('./lib/publish.js')
 
 module.exports = {
-  generateIndex,
   empty,
-  exec
+  exec,
+  generateIndex,
+  publish
 }
