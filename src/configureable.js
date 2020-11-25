@@ -45,7 +45,7 @@ export default function configureable (config = {}) {
             [
               '@babel/preset-env',
               {
-                targets: 'supports es6-modules',
+                targets: 'supports es6-module',
                 modules: false, // Don't transform modules
               },
             ],

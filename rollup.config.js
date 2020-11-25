@@ -22,12 +22,11 @@ const shared = configureable()
 
 export default [
   shared
-    .delete({ targets: 'lib/index.esm.js', verbose: true })
+    .delete({ targets: 'lib/*', verbose: true })
     .esm({ file: 'lib/index.esm.js', target: 'node' })
     .analyze()
     .configure(),
   shared
-    .delete({ targets: 'lib/index.js', verbose: true })
     .cjs({ file: 'lib/index.js' })
     .configure(),
 ]
