@@ -75,7 +75,7 @@ export default function configureable (config = {}) {
   object.virtualIndex = (path, createFilesToIndexOptions = {}) => {
     return object.virtual({
       test: ({ id }) => id.endsWith(path),
-      transform: createFilesToIndex({ test: () => true, createFilesToIndexOptions })
+      transform: createFilesToIndex({ test: () => true, ...createFilesToIndexOptions })
     })
   }
 
