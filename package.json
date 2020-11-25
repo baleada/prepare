@@ -1,6 +1,6 @@
 {
   "name": "@baleada/prepare",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Opinionated tools for preparing Baleada packages to be published",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
