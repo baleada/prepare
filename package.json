@@ -1,10 +1,16 @@
 {
   "name": "@baleada/prepare",
   "version": "0.2.11",
-  "description": "Useful scripts for preparing packages",
-  "main": "index.js",
+  "description": "Opinionated tools for preparing Baleada packages to be published",
+  "main": "lib/index.js",
+  "module": "lib/index.esm.js",
+  "exports": {
+    "require": "./lib/index.js",
+    "import": "./lib/index.esm.js"
+  },
   "scripts": {
-    "prepare": "node ./scripts/prepare.js"
+    "prepare": "rollup --config rollup.config.js",
+    "test": "npx uvu -r esm tests/node .test.js$"
   },
   "repository": {
     "type": "git",
@@ -25,27 +31,22 @@
   },
   "homepage": "https://baleada.netlify.com",
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^1.1.2",
-    "ava": "^3.13.0",
-    "babel-eslint": "^10.0.3",
-    "eslint": "^6.7.2",
-    "eslint-config-standard": "^13.0.1",
-    "eslint-plugin-ava": "^7.1.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^9.2.0",
-    "eslint-plugin-nuxt": "^0.5.2",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
     "esm": "^3.2.25",
     "uvu": "^0.4.1"
   },
   "dependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.12.7",
+    "@babel/plugin-transform-runtime": "^7.12.1",
+    "@babel/preset-env": "^7.12.7",
     "@babel/runtime": "^7.12.5",
     "@baleada/rollup-plugin-source-transform": "^0.4.1",
     "@baleada/rollup-plugin-virtual": "^0.0.6",
+    "@baleada/source-transform-files-to-index": "^0.2.2",
+    "@baleada/source-transform-files-to-routes": "^0.4.2",
     "@rollup/plugin-babel": "^5.2.1",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "rollup-plugin-analyzer": "^3.3.0",
+    "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-vue": "^6.0.0-beta.11"
   }
 }
