@@ -40,7 +40,7 @@
     "@babel/preset-env": "^7.12.7",
     "@babel/runtime": "^7.12.5",
     "@baleada/rollup-plugin-source-transform": "^0.4.1",
-    "@baleada/rollup-plugin-virtual": "^0.0.6",
+    "@baleada/rollup-plugin-virtual": "^0.0.7",
     "@baleada/source-transform-files-to-index": "^0.2.2",
     "@baleada/source-transform-files-to-routes": "^0.4.2",
     "@rollup/plugin-babel": "^5.2.1",
