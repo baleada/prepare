@@ -12,6 +12,8 @@ import {
   outputCjs,
   external,
   resolve,
+  commonjs,
+  json,
   del,
   vue,
   analyze,
@@ -109,6 +111,30 @@ test('resolve(...) configures plugin', () => {
           .configure(),
         expected = {
           plugins: [resolve],
+        }
+        
+  assert.is(value.plugins[0].name, expected.plugins[0].name) // Avoid comparing anonymous functions
+  assert.type(value.plugins[0].name, 'string')
+})
+
+test('commonjs(...) configures plugin', () => {
+  const value = configureable()
+          .commonjs()
+          .configure(),
+        expected = {
+          plugins: [commonjs],
+        }
+        
+  assert.is(value.plugins[0].name, expected.plugins[0].name) // Avoid comparing anonymous functions
+  assert.type(value.plugins[0].name, 'string')
+})
+
+test('json(...) configures plugin', () => {
+  const value = configureable()
+          .json()
+          .configure(),
+        expected = {
+          plugins: [json],
         }
         
   assert.is(value.plugins[0].name, expected.plugins[0].name) // Avoid comparing anonymous functions

@@ -1,7 +1,8 @@
 {
   "name": "@baleada/prepare",
-  "version": "0.3.3",
+  "version": "0.3.2",
   "description": "Opinionated tools for preparing Baleada packages to be published",
+  "type": "module",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
   "exports": {
@@ -10,7 +11,7 @@
   },
   "scripts": {
     "prepare": "rollup --config rollup.config.js",
-    "test": "npx uvu -r esm tests/node .test.js$"
+    "test": "npx uvu -r esm tests"
   },
   "repository": {
     "type": "git",
@@ -32,7 +33,7 @@
   "homepage": "https://baleada.netlify.com",
   "devDependencies": {
     "esm": "^3.2.25",
-    "uvu": "^0.4.1"
+    "uvu": "^0.5.0"
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.12.7",
@@ -44,6 +45,8 @@
     "@baleada/source-transform-files-to-index": "^0.2.2",
     "@baleada/source-transform-files-to-routes": "^0.4.2",
     "@rollup/plugin-babel": "^5.2.1",
+    "@rollup/plugin-commonjs": "^16.0.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "rollup-plugin-analyzer": "^3.3.0",
     "rollup-plugin-delete": "^2.0.0",

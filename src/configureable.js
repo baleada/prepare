@@ -1,5 +1,7 @@
 import babel from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
+import json from '@rollup/plugin-json'
 import del from 'rollup-plugin-delete'
 import vue from 'rollup-plugin-vue'
 import analyze from 'rollup-plugin-analyzer'
@@ -21,6 +23,8 @@ export default function configureable (config = {}) {
   
   // Simple plugin additions
   object.resolve = (...args) => object.plugin(resolve(...args))
+  object.commonjs = (...args) => object.plugin(commonjs(...args))
+  object.json = (...args) => object.plugin(json(...args))
   object.vue = (...args) => object.plugin(vue(...args))
   object.delete = (...args) => object.plugin(del(...args))
   object.analyze = (...args) => object.plugin(analyze(...args))

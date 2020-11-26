@@ -1,5 +1,7 @@
 import pluginBabel from '@rollup/plugin-babel'
 import pluginResolve from '@rollup/plugin-node-resolve'
+import pluginCommonjs from '@rollup/plugin-commonjs'
+import pluginJson from '@rollup/plugin-json'
 import pluginDelete from 'rollup-plugin-delete'
 import pluginVue from 'rollup-plugin-vue'
 import pluginAnalyze from 'rollup-plugin-analyzer'
@@ -20,6 +22,8 @@ export const external = 'stub'
 
 // Plugins with no required params
 export const resolve = pluginResolve()
+export const commonjs = pluginCommonjs()
+export const json = pluginJson()
 export const vue = pluginVue()
 export const analyze = pluginAnalyze()
 export const del = pluginDelete()
