@@ -1,4 +1,4 @@
-import { test } from 'uvu'
+import { suite as createSuite } from 'uvu'
 import * as assert from 'uvu/assert'
 import configureable, { push } from '../../src/configureable.js'
 import { 
@@ -27,7 +27,9 @@ import {
   cjs
 } from '../stubs/configureable.js'
 
-test('push(...) pushes new items to end of nested array', () => {
+const suite = createSuite('configureable')
+
+suite('push(...) pushes new items to end of nested array', () => {
   const value = push({ config: { stub: [] }, array: 'stub', value: 'stub' }),
         expected = {
           stub: ['stub']
@@ -36,7 +38,7 @@ test('push(...) pushes new items to end of nested array', () => {
   assert.equal(value, expected)
 })
 
-test('push(...) initializes nested array if not present', () => {
+suite('push(...) initializes nested array if not present', () => {
   const value = push({ config: {}, array: 'stub', value: 'stub' }),
         expected = {
           stub: ['stub']
@@ -45,7 +47,7 @@ test('push(...) initializes nested array if not present', () => {
   assert.equal(value, expected)
 })
 
-test('push(...) handles arrays, not just strings', () => {
+suite('push(...) handles arrays, not just strings', () => {
   const value = push({ config: {}, array: 'stub', value: ['stub'] }),
         expected = {
           stub: ['stub']
@@ -56,7 +58,7 @@ test('push(...) handles arrays, not just strings', () => {
 
 
 // Generic
-test('input(...) configures input', () => {
+suite('input(...) configures input', () => {
   const value = configureable()
           .input(input)
           .configure(),
@@ -67,7 +69,7 @@ test('input(...) configures input', () => {
   assert.equal(value, expected)
 })
 
-test('output(...) configures output', () => {
+suite('output(...) configures output', () => {
   const value = configureable()
           .output(outputEsm)
           .configure(),
@@ -77,7 +79,7 @@ test('output(...) configures output', () => {
   assert.equal(value, expected)
 })
 
-test('plugin(...) configures plugin', () => {
+suite('plugin(...) configures plugin', () => {
   const value = configureable()
           .plugin(plugin)
           .configure(),
@@ -90,7 +92,7 @@ test('plugin(...) configures plugin', () => {
   assert.equal(value, expected)
 })
 
-test('external(...) configures external', () => {
+suite('external(...) configures external', () => {
   const value = configureable()
           .external(external)
           .configure(),
@@ -105,7 +107,7 @@ test('external(...) configures external', () => {
 
 
 // Specific plugins
-test('resolve(...) configures plugin', () => {
+suite('resolve(...) configures plugin', () => {
   const value = configureable()
           .resolve()
           .configure(),
@@ -117,7 +119,7 @@ test('resolve(...) configures plugin', () => {
   assert.type(value.plugins[0].name, 'string')
 })
 
-test('commonjs(...) configures plugin', () => {
+suite('commonjs(...) configures plugin', () => {
   const value = configureable()
           .commonjs()
           .configure(),
@@ -129,7 +131,7 @@ test('commonjs(...) configures plugin', () => {
   assert.type(value.plugins[0].name, 'string')
 })
 
-test('json(...) configures plugin', () => {
+suite('json(...) configures plugin', () => {
   const value = configureable()
           .json()
           .configure(),
@@ -141,7 +143,7 @@ test('json(...) configures plugin', () => {
   assert.type(value.plugins[0].name, 'string')
 })
 
-test('delete(...) configures plugin', () => {
+suite('delete(...) configures plugin', () => {
   const value = configureable()
           .delete()
           .configure(),
@@ -153,7 +155,7 @@ test('delete(...) configures plugin', () => {
   assert.type(value.plugins[0].name, 'string')
 })
 
-test('vue(...) configures plugin', () => {
+suite('vue(...) configures plugin', () => {
   const value = configureable()
           .vue()
           .configure(),
@@ -165,7 +167,7 @@ test('vue(...) configures plugin', () => {
   assert.type(value.plugins[0].name, 'string')
 })
 
-test('analyze(...) configures plugin', () => {
+suite('analyze(...) configures plugin', () => {
   const value = configureable()
           .analyze()
           .configure(),
@@ -177,7 +179,7 @@ test('analyze(...) configures plugin', () => {
   assert.type(value.plugins[0].name, 'string')
 })
 
-test('virtual(...) configures plugin', () => {
+suite('virtual(...) configures plugin', () => {
   const value = configureable()
           .virtual(baleadaTransformPluginRequiredParam)
           .configure(),
@@ -189,7 +191,7 @@ test('virtual(...) configures plugin', () => {
   assert.type(value.plugins[0].name, 'string')
 })
 
-test('virtualIndex(...) configures plugin', () => {
+suite('virtualIndex(...) configures plugin', () => {
   const value = configureable()
           .virtualIndex(input)
           .configure(),
@@ -201,7 +203,7 @@ test('virtualIndex(...) configures plugin', () => {
   assert.type(value.plugins[0].name, 'string')
 })
 
-test('sourceTransform(...) configures plugin', () => {
+suite('sourceTransform(...) configures plugin', () => {
   const value = configureable()
           .sourceTransform(baleadaTransformPluginRequiredParam)
           .configure(),
@@ -213,7 +215,7 @@ test('sourceTransform(...) configures plugin', () => {
   assert.type(value.plugins[0].name, 'string')
 })
 
-test('toBabelConfig(...) retrieves babel configurations by compatibility', () => {
+suite('toBabelConfig(...) retrieves babel configurations by compatibility', () => {
   const browserValue = configureable().toBabelConfig('browser'),
         nodeValue = configureable().toBabelConfig('node')
 
@@ -221,7 +223,7 @@ test('toBabelConfig(...) retrieves babel configurations by compatibility', () =>
   assert.equal(nodeValue, babelConfigNode)
 })
 
-test('babel(...) configures plugin by compatibility', () => {
+suite('babel(...) configures plugin by compatibility', () => {
   const browserValue = configureable()
           .babel('browser')
           .configure(),
@@ -246,7 +248,7 @@ test('babel(...) configures plugin by compatibility', () => {
   assert.type(nodeValue.plugins[0].name, 'string')
 })
 
-test('esm(...) configures standard ESM build by compatibility', () => {
+suite('esm(...) configures standard ESM build by compatibility', () => {
   const browserValue = configureable()
           .esm({ file: outputEsm.file, target: 'browser' })
           .configure(),
@@ -264,7 +266,7 @@ test('esm(...) configures standard ESM build by compatibility', () => {
   assert.type(nodeValue.plugins[0].name, 'string')
 })
 
-test('cjs(...) configures standard CJS build', () => {
+suite('cjs(...) configures standard CJS build', () => {
   const value = configureable()
           .cjs({ file: outputCjs.file })
           .configure(),
@@ -275,7 +277,7 @@ test('cjs(...) configures standard CJS build', () => {
   assert.type(value.plugins[0].name, 'string')
 })
 
-test('configureable(...) can chain', () => {
+suite('configureable(...) can chain', () => {
   const value = configureable()
           .input(input)
           .plugin(plugin)
@@ -294,4 +296,4 @@ test('configureable(...) can chain', () => {
   assert.is(value.plugins.length, 7)
 })
 
-test.run()
+suite.run()

@@ -29,28 +29,22 @@ const shared = configureable()
         .configure(),
       cjs = shared
         .cjs({ file: 'lib/index.cjs' })
+        .configure(),
+      test = configureable()
+        .input('src/index.js')
+        .resolve()
+        .sourceTransform({
+          test: ({ source }) => source === '',
+          transform: ({ id, source }) => {
+            console.log(id)
+            return readFileSync(id, 'utf8')
+          }
+        })
+        .json()
+        .commonjs()
+        .virtualIndex('src/index.js')
+        .esm({ file: 'tests/fixtures/TEST_BUNDLE.js', target: 'node' })
         .configure()
-      // test = configureable()
-      //   .input('src/index.js')
-      //   .resolve()
-      //   .sourceTransform({
-      //     test: ({ id, source }) => id.endsWith('js') && source.includes('\nmodule.exports = '),
-      //     transform: ({ id, source }) => {
-      //       console.log({ id })
-      //     }
-      //   })
-      //   .sourceTransform({
-      //     test: ({ source }) => source === '',
-      //     transform: ({ id, source }) => {
-      //       console.log(id)
-      //       return readFileSync(id, 'utf8')
-      //     }
-      //   })
-      //   .json()
-      //   .commonjs({ requireReturnsDefault: 'auto' })
-      //   .virtualIndex('src/index.js')
-      //   .esm({ file: 'tests/fixtures/index.js', target: 'node' })
-      //   .configure()
 
 export default [
   esm,

@@ -1,18 +1,17 @@
 import puppeteer from 'puppeteer-core'
 
-export default function withPuppeteer (
-  suite,
-  options = {
-    launch: ({ executablePath: { macOS } }) => ({ product: 'chrome', executablePath: macOS }),
-    contextKey: 'puppeteer',
-  }
-) {
-  const { launch: rawLaunch, contextKey } = options,
+const defaultOptions = {
+  launch: ({ executablePath: { macOS } }) => ({ product: 'chrome', executablePath: macOS }),
+  contextKey: 'puppeteer',
+}
+
+export default function withPuppeteer (suite, options = {}) {
+  const { launch: rawLaunch, contextKey } = { ...defaultOptions, ...options },
         launch = ensureLaunch(rawLaunch)
 
   suite.before(async context => {
     const browser = await puppeteer.launch(launch),
-          page = await browser.pages()[0]
+          page = (await browser.pages())[0]
 
     context[contextKey] = { browser, page }
   })
@@ -24,12 +23,14 @@ export default function withPuppeteer (
   return suite
 }
 
-function ensureLaunch (rawLaunch) {
-  return rawLaunch === 'function'
-    ? rawLaunch({
-        executablePath: {
-          macOS: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-        }
-      })
+const launchApi = {
+  executablePath: {
+    macOS: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  }
+}
+
+export function ensureLaunch (rawLaunch) {
+  return typeof rawLaunch === 'function'
+    ? rawLaunch(launchApi)
     : rawLaunch
 }

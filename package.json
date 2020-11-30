@@ -11,7 +11,8 @@
   },
   "scripts": {
     "prepare": "rollup --config rollup.config.js",
-    "test": "npx uvu -r esm tests"
+    "test:only": "run() { npx uvu tests/$2 $1.test.js$; }; run",
+    "test": "npm run test:only ."
   },
   "repository": {
     "type": "git",

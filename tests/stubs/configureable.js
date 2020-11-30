@@ -1,4 +1,4 @@
-import pluginBabel from '@rollup/plugin-babel'
+import { babel as pluginBabel } from '@rollup/plugin-babel'
 import pluginResolve from '@rollup/plugin-node-resolve'
 import pluginCommonjs from '@rollup/plugin-commonjs'
 import pluginJson from '@rollup/plugin-json'
@@ -64,3 +64,4 @@ export const cjs = {
     babelNode
   ]
 }
+
