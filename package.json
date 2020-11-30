@@ -3,11 +3,11 @@
   "version": "0.3.3",
   "description": "Opinionated tools for preparing Baleada packages to be published",
   "type": "module",
-  "main": "lib/index.js",
-  "module": "lib/index.esm.js",
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
   "exports": {
-    "require": "./lib/index.js",
-    "import": "./lib/index.esm.js"
+    "require": "./lib/index.cjs",
+    "import": "./lib/index.js"
   },
   "scripts": {
     "prepare": "rollup --config rollup.config.js",

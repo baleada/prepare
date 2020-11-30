@@ -24,11 +24,11 @@ const shared = configureable()
         ]),
       esm = shared
         .delete({ targets: 'lib/*', verbose: true })
-        .esm({ file: 'lib/index.esm.js', target: 'node' })
+        .esm({ file: 'lib/index.js', target: 'node' })
         .analyze()
         .configure(),
       cjs = shared
-        .cjs({ file: 'lib/index.js' })
+        .cjs({ file: 'lib/index.cjs' })
         .configure()
       // test = configureable()
       //   .input('src/index.js')
