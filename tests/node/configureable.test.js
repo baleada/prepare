@@ -1,10 +1,10 @@
 import { test } from 'uvu'
 import * as assert from 'uvu/assert'
-import configureable, { push } from '../../src/configureable'
+import configureable, { push } from '../../src/configureable.js'
 import { 
   babelConfigBrowser,
   babelConfigNode,
-} from '../fixtures/configureable'
+} from '../fixtures/configureable.js'
 import {
   input,
   plugin,
@@ -25,7 +25,7 @@ import {
   esmBrowser,
   esmNode,
   cjs
-} from '../stubs/configureable'
+} from '../stubs/configureable.js'
 
 test('push(...) pushes new items to end of nested array', () => {
   const value = push({ config: { stub: [] }, array: 'stub', value: 'stub' }),

@@ -1,3 +1,3 @@
 # `@baleada/prepare`
 
-Useful scripts for preparing packages.
+Opinionated tools for preparing Baleada packages to be published.
