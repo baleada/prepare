@@ -7,7 +7,7 @@ export default function withPuppeteer (
     contextKey: 'puppeteer',
   }
 ) {
-  const { launch: rawLaunch } = options,
+  const { launch: rawLaunch, contextKey } = options,
         launch = ensureLaunch(rawLaunch)
 
   suite.before(async context => {
