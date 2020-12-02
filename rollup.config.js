@@ -19,6 +19,7 @@ const shared = configureable('rollup')
           '@baleada/vite-serve-virtual',
           '@baleada/vite-serve-as-vue',
           'puppeteer-core',
+          'path',
           
           // Not necessary, since these aren't imported, but I want to be explicit about package dependencies here
           '@babel/preset-env',
