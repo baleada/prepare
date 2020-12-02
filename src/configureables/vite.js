@@ -9,8 +9,8 @@ export default function configureable (config = {}) {
 
   object.alias = aliases => configureable({
     ...config,
-    aliases: {
-      ...(config.aliases || {}),
+    alias: {
+      ...(config.alias || {}),
       ...aliases,
     }
   })

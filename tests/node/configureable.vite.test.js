@@ -7,7 +7,7 @@ const suite = createSuite('configureable.vite')
 suite(`configures aliases`, context => {
   const value = configureable('vite')
           .alias({ '@components': 'src/components' })
-          .configure().aliases,
+          .configure().alias,
         expected = { '@components': 'src/components' }
   
   assert.equal(value, expected)
