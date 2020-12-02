@@ -18,13 +18,13 @@ export default function configureable (config = []) {
   object.virtualIndex = (path, createFilesToIndexOptions = {}) => {
     return object.virtual({
       test: ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id),
-      transform: createFilesToIndex({ test: () => true, importType: 'relative', ...createFilesToIndexOptions })
+      transform: createFilesToIndex({ test: () => true, importType: 'relativeFromRoot', ...createFilesToIndexOptions })
     })
   }
   object.virtualRoutes = (path, createFilesToRoutesOptions = {}) => {
     return object.virtual({
       test: ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id),
-      transform: createFilesToRoutes({ test: () => true, importType: 'relative', ...createFilesToRoutesOptions })
+      transform: createFilesToRoutes({ test: () => true, importType: 'relativeFromRoot', ...createFilesToRoutesOptions })
     })
   }
 
