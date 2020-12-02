@@ -11,7 +11,7 @@ import createFilesToIndex from '@baleada/source-transform-files-to-index'
 import { 
   babelConfigBrowser,
   babelConfigNode,
-} from '../fixtures/configureable.js'
+} from '../fixtures/configureable.rollup.js'
 
 // Generic
 export const input = 'src/index.js'

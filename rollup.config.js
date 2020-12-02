@@ -1,6 +1,6 @@
 import configureable from './src/configureable.js'
 
-const shared = configureable()
+const shared = configureable('rollup')
         .input('src/index.js')
         .resolve()
         .virtualIndex('src/index.js')
@@ -15,6 +15,9 @@ const shared = configureable()
           '@baleada/rollup-plugin-virtual',
           '@baleada/rollup-plugin-source-transform',
           '@baleada/source-transform-files-to-index',
+          '@baleada/source-transform-files-to-routes',
+          '@baleada/vite-serve-virtual',
+          '@baleada/vite-serve-as-vue',
           'puppeteer-core',
           
           // Not necessary, since these aren't imported, but I want to be explicit about package dependencies here
@@ -29,25 +32,9 @@ const shared = configureable()
         .configure(),
       cjs = shared
         .cjs({ file: 'lib/index.cjs' })
-        .configure(),
-      test = configureable()
-        .input('src/index.js')
-        .resolve()
-        .sourceTransform({
-          test: ({ source }) => source === '',
-          transform: ({ id, source }) => {
-            console.log(id)
-            return readFileSync(id, 'utf8')
-          }
-        })
-        .json()
-        .commonjs()
-        .virtualIndex('src/index.js')
-        .esm({ file: 'tests/fixtures/TEST_BUNDLE.js', target: 'node' })
         .configure()
 
 export default [
   esm,
   cjs,
-  // test,
 ]
