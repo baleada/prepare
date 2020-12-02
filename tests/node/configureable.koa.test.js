@@ -28,4 +28,20 @@ suite(`asVue(...) adds Baleada Vite Serve as Vue to config`, context => {
   assert.type(value, 'function')
 })
 
+suite(`virtualIndex(...) configures virtual index`, context => {
+  const value = configureable('koa')
+          .virtualIndex('src/index.js')
+          .configure()[0]
+
+  assert.type(value, 'function')
+})
+
+suite(`virtualRoutes(...) configures virtual routes`, context => {
+  const value = configureable('koa')
+          .virtualRoutes('src/routes.js')
+          .configure()[0]
+
+  assert.type(value, 'function')
+})
+
 suite.run()
