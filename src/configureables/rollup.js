@@ -79,13 +79,13 @@ export default function configureable (config = {}) {
   // Frequently needed virtual files
   object.virtualIndex = (path, createFilesToIndexOptions = {}) => {
     return object.virtual({
-      test: ({ id }) => id.endsWith(path),
+      test: ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id),
       transform: createFilesToIndex({ test: () => true, ...createFilesToIndexOptions })
     })
   }
   object.virtualRoutes = (path, createFilesToRoutesOptions = {}) => {
     return object.virtual({
-      test: ({ id }) => id.endsWith(path),
+      test: ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id),
       transform: createFilesToRoutes({ test: () => true, ...createFilesToRoutesOptions })
     })
   }
