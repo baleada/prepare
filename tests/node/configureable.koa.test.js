@@ -38,7 +38,7 @@ suite(`virtualIndex(...) configures virtual index`, context => {
 
 suite(`virtualRoutes(...) configures virtual routes`, context => {
   const value = configureable('koa')
-          .virtualRoutes('src/routes.js')
+          .virtualRoutes({ path: 'src/routes.js', router: 'vue' })
           .configure()[0]
 
   assert.type(value, 'function')

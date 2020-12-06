@@ -51,6 +51,7 @@
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
+    "markdown-it": "^12.0.2",
     "puppeteer-core": "^5.5.0",
     "rollup-plugin-analyzer": "^3.3.0",
     "rollup-plugin-delete": "^2.0.0",

@@ -83,10 +83,10 @@ export default function configureable (config = {}) {
       transform: createFilesToIndex({ test: () => true, ...createFilesToIndexOptions })
     })
   }
-  object.virtualRoutes = (path, createFilesToRoutesOptions = {}) => {
+  object.virtualRoutes = ({ path, router }, createFilesToRoutesOptions = {}) => {
     return object.virtual({
       test: ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id),
-      transform: createFilesToRoutes({ test: () => true, ...createFilesToRoutesOptions })
+      transform: createFilesToRoutes(router, { test: () => true, ...createFilesToRoutesOptions })
     })
   }
 

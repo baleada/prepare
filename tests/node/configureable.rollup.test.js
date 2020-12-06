@@ -204,6 +204,18 @@ suite('virtualIndex(...) configures plugin', () => {
   assert.type(value.plugins[0].name, 'string')
 })
 
+suite(`virtualRoutes(...) configures virtual routes`, context => {
+  const value = configureable('rollup')
+          .virtualRoutes({ path: 'src/routes.js', router: 'vue' })
+          .configure(),
+          expected = {
+            plugins: [virtual]
+          }
+
+  assert.is(value.plugins[0].name, expected.plugins[0].name) // Avoid comparing anonymous functions
+  assert.type(value.plugins[0].name, 'string')
+})
+
 suite('sourceTransform(...) configures plugin', () => {
   const value = configureable('rollup')
           .sourceTransform(baleadaTransformPluginRequiredParam)
