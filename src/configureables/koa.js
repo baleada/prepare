@@ -9,7 +9,11 @@ export default function configureable (config = []) {
   // Return the final config
   object.configure = () => config
 
-  object.plugin = plugin => configureable([...config, plugin])
+  object.plugin = rawPlugin => configureable([...config, ensurePlugin(rawPlugin)])
+  object.plugin.api = {
+    createFilesToIndex,
+    createFilesToRoutes,
+  }
 
   object.virtual = (...args) => object.plugin(virtual(...args))
   object.asVue = (...args) => object.plugin(asVue(...args))
@@ -30,3 +34,9 @@ export default function configureable (config = []) {
 
   return object
 }
+
+const pluginApi = {
+  createFilesToIndex,
+  createFilesToRoutes
+}
+

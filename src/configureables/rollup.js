@@ -18,9 +18,13 @@ export default function configureable (config = {}) {
 
   // Generic
   object.input = file => configureable({ ...config, input: file }),
-  object.plugin = plugin => configureable(push({ config, array: 'plugins', value: plugin }))
   object.output = output => configureable(push({ config, array: 'output', value: output }))
   object.external = external => configureable(push({ config, array: 'external', value: external }))
+  object.plugin = plugin => configureable(push({ config, array: 'plugins', value: plugin }))
+  object.plugin.api = {
+    createFilesToIndex,
+    createFilesToRoutes,
+  }
   
   // Simple plugin additions
   object.resolve = (...args) => object.plugin(resolve(...args))
