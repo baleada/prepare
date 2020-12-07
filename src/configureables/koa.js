@@ -9,7 +9,7 @@ export default function configureable (config = []) {
   // Return the final config
   object.configure = () => config
 
-  object.plugin = rawPlugin => configureable([...config, ensurePlugin(rawPlugin)])
+  object.plugin = plugin => configureable([...config, plugin])
   object.plugin.api = {
     createFilesToIndex,
     createFilesToRoutes,
