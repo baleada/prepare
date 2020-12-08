@@ -1,4 +1,5 @@
 import { babel } from '@rollup/plugin-babel'
+import typescript from '@rollup/plugin-typescript'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
@@ -83,6 +84,11 @@ export default function configureable (config = {}) {
     .plugin(babel(object.toBabelConfig(({ target, format }))))
     .external(/@babel\/runtime/)
 
+
+  // Typescript
+  object.toTypeScriptConfig = () => ({})
+  object.typescript = (...args) => object.plugin(typescript(...args))
+
   // Frequently needed virtual files
   object.virtualIndex = (path, createFilesToIndexOptions = {}) => {
     return object.virtual({
@@ -108,6 +114,12 @@ export default function configureable (config = {}) {
     return object
       .output({ file, format: 'cjs' })
       .babel({ target: 'node', format: 'cjs' })
+  }
+
+  object.ts = ({ file }) => {
+    return object
+      .output({ file })
+      .typescript()
   }
 
   return object
