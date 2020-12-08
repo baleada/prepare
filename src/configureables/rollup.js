@@ -37,11 +37,14 @@ export default function configureable (config = {}) {
   object.sourceTransform = (...args) => object.plugin(sourceTransform(...args))
 
   // Babel
-  object.toBabelConfig = target => {
+  object.toBabelConfig = ({ target, format }) => {
     const sharedConfig = {
       plugins: [
         '@babel/plugin-proposal-optional-chaining',
-        '@babel/plugin-transform-runtime',
+        [
+          '@babel/plugin-transform-runtime',
+          { useESModules: format === 'esm' }
+        ]
       ],
       babelHelpers: 'runtime',
       exclude: 'node_modules/**',
@@ -76,8 +79,8 @@ export default function configureable (config = {}) {
         }
     }
   }
-  object.babel = target => object
-    .plugin(babel(object.toBabelConfig(target)))
+  object.babel = ({ target, format }) => object
+    .plugin(babel(object.toBabelConfig(({ target, format }))))
     .external(/@babel\/runtime/)
 
   // Frequently needed virtual files
@@ -98,13 +101,13 @@ export default function configureable (config = {}) {
   object.esm = ({ file, target }) => {
     return object
       .output({ file, format: 'esm' })
-      .babel(target)
+      .babel({ target, format: 'esm' })
   }
 
   object.cjs = ({ file }) => {
     return object
       .output({ file, format: 'cjs' })
-      .babel('node')
+      .babel({ target: 'node', format: 'cjs' })
   }
 
   return object
