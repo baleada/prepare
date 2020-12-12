@@ -1,6 +1,6 @@
 {
   "name": "@baleada/prepare",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "description": "Opinionated tools for preparing Baleada packages to be published",
   "type": "module",
   "main": "lib/index.cjs",
