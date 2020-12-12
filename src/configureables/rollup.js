@@ -41,6 +41,7 @@ export default function configureable (config = {}) {
   object.toBabelConfig = ({ target, format }) => {
     const sharedConfig = {
       plugins: [
+        '@babel/plugin-proposal-nullish-coalescing-operator',
         '@babel/plugin-proposal-optional-chaining',
         [
           '@babel/plugin-transform-runtime',

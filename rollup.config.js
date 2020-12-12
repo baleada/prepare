@@ -9,6 +9,7 @@ const shared = configureable('rollup')
           '@rollup/plugin-commonjs',
           '@rollup/plugin-json',
           '@rollup/plugin-node-resolve',
+          '@rollup/plugin-typescript',
           'rollup-plugin-delete',
           'rollup-plugin-vue',
           'rollup-plugin-analyzer',
@@ -24,6 +25,7 @@ const shared = configureable('rollup')
           // Not necessary, since these aren't imported, but I want to be explicit about package dependencies here
           '@babel/preset-env',
           '@babel/plugin-proposal-optional-chaining',
+          '@babel/plugin-proposal-nullish-coalescing-operator',
           '@babel/plugin-transform-runtime',
         ]),
       esm = shared
