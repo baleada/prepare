@@ -13,7 +13,7 @@ export default function withPuppeteer (suite, options = {}) {
     const browser = await puppeteer.launch(launch),
           page = (await browser.pages())[0],
           mouseClick = async selector => {
-            const coords = await page.evaluate(() => JSON.parse(JSON.stringify(document.querySelector(selector))), selector)
+            const coords = await page.evaluate(selector => JSON.parse(JSON.stringify(document.querySelector(selector))), selector)
             await page.mouse.click(coords.x, coords.y)
           }
 
