@@ -11,9 +11,13 @@ export default function withPuppeteer (suite, options = {}) {
 
   suite.before(async context => {
     const browser = await puppeteer.launch(launch),
-          page = (await browser.pages())[0]
+          page = (await browser.pages())[0],
+          mouseClick = async selector => {
+            const coords = await page.evaluate(() => JSON.parse(JSON.stringify(document.querySelector(selector))), selector)
+            await page.mouse.click(coords.x, coords.y)
+          }
 
-    context[contextKey] = { browser, page }
+    context[contextKey] = { browser, page, mouseClick }
   })
   
   suite.after(async context => {
