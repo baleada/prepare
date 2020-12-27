@@ -48,6 +48,8 @@ export default function configureable (config = {}) {
   object.spaLinks = (...args) => object.plugin([spaLinks, ...args])
   object.textContent = (...args) => object.plugin([textContent, ...args])
   object.linkAttributes = (...args) => object.plugin([linkAttributes, ...args])
+
+  return object
 }
 
 function ensurePlugin (rawPlugin) {
@@ -72,7 +74,7 @@ const highlightsByName = {
     try {
       const children = refractor.highlight(code, lang)
       
-      return html = rehype()
+      return rehype()
         .stringify({ type: 'root', children })
         .toString()
         .replace(/({{|}})/g, '<span>$1</span>')

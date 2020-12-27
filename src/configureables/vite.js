@@ -42,6 +42,31 @@ export default function configureable (config = {}) {
     }
   })
 
+  object.includeDeps = deps => configureable({
+    ...config,
+    optimizeDeps: {
+      include: [
+        ...config.optimizeDeps?.include || [],
+        ...deps,
+      ],
+      exclude: [
+        ...config.optimizeDeps?.exclude || [],
+      ]
+    }
+  })
+  object.excludeDeps = deps => configureable({
+    ...config,
+    optimizeDeps: {
+      exclude: [
+        ...config.optimizeDeps?.exclude || [],
+        ...deps,
+      ],
+      include: [
+        ...config.optimizeDeps?.include || [],
+      ]
+    }
+  })
+
   return object
 }
 
