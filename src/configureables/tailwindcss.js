@@ -1,9 +1,9 @@
 import baleadaTheme from '@baleada/tailwind-theme'
 // import baleadaComponents from '@baleada/tailwind-components'
-import linearNumeric from '@baleada/linear-numeric'
-import * as themeUtils from '@baleada/theme-utils'
+import linearNumeric from '@baleada/tailwind-linear-numeric'
+import * as themeUtils from '@baleada/tailwind-theme-utils'
 import forms from '@tailwindcss/forms'
-import typography from '@tailwindcss/typography'
+// import typography from '@tailwindcss/typography'
 import defaultConfig from 'tailwindcss/defaultConfig.js'
 import colors from 'tailwindcss/colors.js'
 import createPlugin from 'tailwindcss/plugin.js'
@@ -85,7 +85,7 @@ export default function configureable (config = {}) {
     ]
   })
   object.forms = () => object.plugin(forms)
-  object.typography = () => object.plugin(typography)
+  // object.typography = () => object.plugin(typography)
   // object.baleadaComponents = () => object.plugin(baleadaComponents)
   
   object.preset = preset => configureable({
