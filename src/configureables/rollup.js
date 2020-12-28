@@ -60,7 +60,7 @@ export default function configureable (config = {}) {
               '@babel/preset-env',
               {
                 targets: 'supports es6-module',
-                modules: false, // Don't transform modules
+                modules: format === 'esm' ? false : 'cjs',
               },
             ],
           ],
@@ -73,7 +73,7 @@ export default function configureable (config = {}) {
               '@babel/preset-env',
               {
                 targets: { node: true },
-                modules: false, // Don't transform modules
+                modules: format === 'esm' ? false : 'cjs',
               },
             ],
           ],

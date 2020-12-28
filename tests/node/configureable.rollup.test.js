@@ -229,8 +229,10 @@ suite('sourceTransform(...) configures plugin', () => {
 })
 
 suite('toBabelConfig(...) retrieves babel configurations by compatibility', () => {
-  const browserValue = configureable('rollup').toBabelConfig('browser'),
-        nodeValue = configureable('rollup').toBabelConfig('node')
+  const browserValue = configureable('rollup').toBabelConfig({ target: 'browser', format: 'esm' }),
+        nodeValue = configureable('rollup').toBabelConfig({ target: 'node', format: 'esm' })
+
+  console.log(JSON.stringify(browserValue, null, 2), JSON.stringify(nodeValue, null, 2))
 
   assert.equal(browserValue, babelConfigBrowser)
   assert.equal(nodeValue, babelConfigNode)
