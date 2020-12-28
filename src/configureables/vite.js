@@ -46,11 +46,11 @@ export default function configureable (config = {}) {
     ...config,
     optimizeDeps: {
       include: [
-        ...config.optimizeDeps?.include || [],
+        ...(config.optimizeDeps?.include || []),
         ...deps,
       ],
       exclude: [
-        ...config.optimizeDeps?.exclude || [],
+        ...(config.optimizeDeps?.exclude || []),
       ]
     }
   })
@@ -58,11 +58,11 @@ export default function configureable (config = {}) {
     ...config,
     optimizeDeps: {
       exclude: [
-        ...config.optimizeDeps?.exclude || [],
+        ...(config.optimizeDeps?.exclude || []),
         ...deps,
       ],
       include: [
-        ...config.optimizeDeps?.include || [],
+        ...(config.optimizeDeps?.include || []),
       ]
     }
   })
