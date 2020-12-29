@@ -46,7 +46,7 @@ const shared = configureable('rollup')
           // postcss
           'postcss-import',
           'postcss-nested',
-          /tailwindcss\//,
+          /^tailwindcss/,
           'postcss-preset-env',
           
           // babel
