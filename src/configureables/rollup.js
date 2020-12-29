@@ -92,14 +92,14 @@ export default function configureable (config = {}) {
 
   // Frequently needed virtual files
   object.virtualIndex = (path, createFilesToIndexOptions = {}) => {
-    return object.virtual(({ toEndsWithRETest }) => ({
-      test: toEndsWithRETest(path),
+    return object.virtual(({ createIdEndsWith }) => ({
+      test: createIdEndsWith(path),
       transform: createFilesToIndex({ test: () => true, ...createFilesToIndexOptions }),
     }))
   }
   object.virtualRoutes = ({ path, router }, createFilesToRoutesOptions = {}) => {
-    return object.virtual(({ toEndsWithRETest }) => ({
-      test: toEndsWithRETest(path),
+    return object.virtual(({ createIdEndsWith }) => ({
+      test: createIdEndsWith(path),
       transform: createFilesToRoutes(router, { test: () => true, ...createFilesToRoutesOptions }),
     }))
   }
@@ -144,10 +144,10 @@ function ensureArray (unknown) {
 
 function ensureVirtualParams (rawParams) {
   return typeof rawParams === 'function'
-    ? rawParams({ toEndsWithRETest })
+    ? rawParams({ createIdEndsWith })
     : rawParams
 }
 
-function toEndsWithRETest (path) {
+function createIdEndsWith (path) {
   return ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id)
 }

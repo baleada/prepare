@@ -15,28 +15,32 @@ export default function configureable (config = []) {
     createFilesToRoutes,
   }
 
-  object.virtual = (...args) => object.plugin(virtual(...args))
+  object.virtual = (...args) => object.plugin(virtual(ensureVirtualParams(...args)))
   object.asVue = (...args) => object.plugin(asVue(...args))
 
   // Frequently needed virtual files
   object.virtualIndex = (path, createFilesToIndexOptions = {}) => {
-    return object.virtual({
-      test: ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id),
+    return object.virtual(({ createIdEndsWith }) => ({
+      test: createIdEndsWith(path),
       transform: createFilesToIndex({ test: () => true, importType: 'relativeFromRoot', ...createFilesToIndexOptions })
-    })
+    }))
   }
   object.virtualRoutes = ({ path, router }, createFilesToRoutesOptions = {}) => {
-    return object.virtual({
-      test: ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id),
+    return object.virtual(({ createIdEndsWith }) => ({
+      test: createIdEndsWith(path),
       transform: createFilesToRoutes(router, { test: () => true, importType: 'relativeFromRoot', ...createFilesToRoutesOptions })
-    })
+    }))
   }
 
   return object
 }
 
-const pluginApi = {
-  createFilesToIndex,
-  createFilesToRoutes
+function ensureVirtualParams (rawParams) {
+  return typeof rawParams === 'function'
+    ? rawParams({ createIdEndsWith })
+    : rawParams
 }
 
+function createIdEndsWith (path) {
+  return ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id)
+}
