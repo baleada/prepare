@@ -1,4 +1,4 @@
-import baleadaTheme from '@baleada/tailwind-theme'
+import baleada from '@baleada/tailwind-theme'
 // import baleadaComponents from '@baleada/tailwind-components'
 import linearNumeric from '@baleada/tailwind-linear-numeric'
 import * as themeUtils from '@baleada/tailwind-theme-utils'
@@ -14,70 +14,60 @@ export default function configureable (config = {}) {
   
   object.configure = () => config
 
+  object.important = () => configureable({ ...config, important: true })
+
   object.purge = paths => configureable({
     ...config,
     purge: {
-      content: {
+      content: [
         ...(config.purge?.content ?? []),
-        ...paths
-      }
+        ...paths,
+      ]
     }
   })
 
-  object.theme = theme => configureable({
-    ...config,
-    theme: {
-      ...(config.theme ?? {}),
-      ...theme,
-    }
-  })
-  object.baleadaTheme = () => object.theme(baleadaTheme)
-  object.theme.override = ({ property, values: rawValues }, usesContext) => {
-    const values = ensureValues({ rawValues, usesContext })
-    return object.theme({
-      [property]: typeof values === 'function' ? values : {
-        ...(config.theme?.[property] ?? {}),
-        ...values,
+  object.theme = theme => {
+    const ensuredTheme = ensureTheme({ rawTheme: theme, currentConfig: config })
+    return configureable({
+      ...config,
+      theme: {
+        ...(config.theme ?? {}),
+        ...ensuredTheme,
       }
     })
   }
-  object.theme.extend = ({ property, values: rawValues }, usesContext) => {
-    const values = ensureValues({ rawValues, usesContext })
+  object.baleada = () => object.theme(baleada)
+  object.theme.extend = theme => {
+    const ensuredTheme = ensureTheme({ rawTheme: theme, currentConfig: config })
     return object.theme({
       extend: {
         ...(config.theme?.extend ?? {}),
-        [property]: {
-          ...(config.theme?.[property] ?? {}),
-          ...values,
-        }
+        ...ensuredTheme,
       }
     })
   }
   
-  object.variants = variants => configureable({
-    ...config,
-    variants: {
-      ...(config.variants ?? {}),
-      ...variants,
-    }
-  })
-  object.variants.override = ({ property, values: rawValues }, usesContext) => {
-    const values = ensureValues({ rawValues, usesContext })
-    return object.variants({
-      [property]: values
+  object.variants = variants => {
+    const ensuredVariants = ensureVariants({ rawVariants: variants, currentConfig: config })
+    return configureable({
+      ...config,
+      variants: {
+        ...(config.variants ?? {}),
+        ...ensuredVariants,
+      }
     })
   }
-  object.variants.extend = ({ property, values: rawValues }, usesContext) => {
-    const values = ensureValues({ rawValues, usesContext })
+  object.variants.extend = variants => {
+    const ensuredVariants = ensureVariants({ rawVariants: variants, currentConfig: config })
     return object.variants({
       extend: {
         ...(config.variants?.extend ?? {}),
-        [property]: values,
+        ...ensuredVariants,
       }
     })
   }
 
-  object.plugin = (plugin, usesContext) => configureable({
+  object.plugin = plugin => configureable({
     ...config,
     plugins: [
       ...(config.plugins ?? []),
@@ -99,10 +89,14 @@ export default function configureable (config = {}) {
   return object
 }
 
-function ensureValues ({ rawValues, usesContext }) {
-  if (usesContext) {
-    return rawValues({ defaultConfig, colors, resolveConfig, themeUtils, linearNumeric, baleadaTheme })
-  }
+function ensureTheme ({ rawTheme, currentConfig }) {
+  return typeof rawTheme === 'function'
+    ? rawTheme({ defaultConfig, currentConfig, colors, resolveConfig, themeUtils, linearNumeric, baleada })
+    : rawTheme
+}
 
-  return rawValues
+function ensureVariants ({ rawVariants, currentConfig }) {
+  return typeof rawVariants === 'function'
+    ? rawVariants({ defaultConfig, currentConfig, colors, resolveConfig, themeUtils, linearNumeric, baleada })
+    : rawVariants
 }
