@@ -1,7 +1,7 @@
 import koa from './configureables/koa.js'
 import rollup from './configureables/rollup.js'
 import vite from './configureables/vite.js'
-import markdownIt from './configureables/markdownIt.js'
+import markdownit from './configureables/markdownit.js'
 import postcss from './configureables/postcss.js'
 import tailwindcss from './configureables/tailwindcss.js'
 
@@ -9,7 +9,7 @@ const configureablesByTool = {
   koa,
   rollup,
   vite,
-  markdownIt,
+  markdownit,
   postcss,
   tailwindcss,
 }
