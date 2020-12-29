@@ -34,7 +34,7 @@ export default function configureable (config = {}) {
   object.vue = (...args) => object.plugin(vue(...args))
   object.delete = (...args) => object.plugin(del(...args))
   object.analyze = (...args) => object.plugin(analyze(...args))
-  object.virtual = (...args) => object.plugin(virtual(...args))
+  object.virtual = (...args) => object.plugin(virtual(ensureVirtualParams(...args)))
   object.sourceTransform = (...args) => object.plugin(sourceTransform(...args))
 
   // Babel
@@ -92,16 +92,16 @@ export default function configureable (config = {}) {
 
   // Frequently needed virtual files
   object.virtualIndex = (path, createFilesToIndexOptions = {}) => {
-    return object.virtual({
-      test: ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id),
-      transform: createFilesToIndex({ test: () => true, ...createFilesToIndexOptions })
-    })
+    return object.virtual(({ toEndsWithRETest }) => ({
+      test: toEndsWithRETest(path),
+      transform: createFilesToIndex({ test: () => true, ...createFilesToIndexOptions }),
+    }))
   }
   object.virtualRoutes = ({ path, router }, createFilesToRoutesOptions = {}) => {
-    return object.virtual({
-      test: ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id),
-      transform: createFilesToRoutes(router, { test: () => true, ...createFilesToRoutesOptions })
-    })
+    return object.virtual(({ toEndsWithRETest }) => ({
+      test: toEndsWithRETest(path),
+      transform: createFilesToRoutes(router, { test: () => true, ...createFilesToRoutesOptions }),
+    }))
   }
 
   // Standard configs for formats
@@ -140,4 +140,14 @@ function ensureArray (unknown) {
   return Array.isArray(unknown)
     ? unknown
     : [unknown]
+}
+
+function ensureVirtualParams (rawParams) {
+  return typeof rawParams === 'function'
+    ? rawParams({ toEndsWithRETest })
+    : rawParams
+}
+
+function toEndsWithRETest (path) {
+  return ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id)
 }
