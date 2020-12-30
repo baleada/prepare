@@ -4,7 +4,7 @@ import { parseFragment, serialize } from 'parse5'
 
 export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) => name, set }) {
   const icons = dirs.reduce((icons, dir) => {
-    const files = readdirSync(`./${basePath}/${dir}`),
+    const files = readdirSync(`./${basePath}/${dir}`).filter(file => file.endsWith('.svg')),
           fileMetadata = files.map(file => ({
             snakeCased: toSnakeCased({ name: parse(file).name, dir }),
             contents: readFileSync(`./${basePath}/${dir}/${file}`, 'utf8'),
