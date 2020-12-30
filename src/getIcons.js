@@ -1,10 +1,12 @@
 import { readdirSync, readFileSync } from 'fs'
-import { parse } from 'path'
+import { resolve, parse } from 'path'
 import { parseFragment, serialize } from 'parse5'
 
-export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) => name, set }) {
+export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) => name, set, test = () => true }) {
   const icons = dirs.reduce((icons, dir) => {
-    const files = readdirSync(`./${basePath}/${dir}`).filter(file => file.endsWith('.svg')),
+    const files = readdirSync(`./${basePath}/${dir}`)
+            .filter(file => file.endsWith('.svg'))
+            .filter(file => test({ id: resolve('', basePath, dir, file) })),
           fileMetadata = files.map(file => ({
             snakeCased: toSnakeCased({ name: parse(file).name, dir }),
             contents: readFileSync(`./${basePath}/${dir}/${file}`, 'utf8'),

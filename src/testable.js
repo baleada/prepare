@@ -5,6 +5,8 @@ export default function testable (...tests) {
 
   object.test = param => tests.every(test => test(param))
 
+  object.fn = test => testable(...tests, test)
+
   object.idEndsWith = path => testable(
     ...tests,
     ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id)
