@@ -46,7 +46,7 @@
     "@baleada/markdown-it-spa-links": "^0.6.2",
     "@baleada/markdown-it-text-content": "^0.1.2",
     "@baleada/rollup-plugin-source-transform": "^0.4.3",
-    "@baleada/rollup-plugin-virtual": "^0.0.12",
+    "@baleada/rollup-plugin-virtual": "^0.0.13",
     "@baleada/source-transform-files-to-index": "^0.2.3",
     "@baleada/source-transform-files-to-routes": "^0.4.3",
     "@baleada/tailwind-linear-numeric": "^0.10.0",
