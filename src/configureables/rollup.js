@@ -105,7 +105,7 @@ export default function configureable (config = {}) {
   // TODO: add iconExt param to support more than just .vue
   object.virtual.iconComponentIndex = ({ icons }) => object.virtual(({ testable }) => ({
     test: testable.idEndsWith('src/index.js').test,
-    transform: () => toIconComponentIndex(icons)
+    transform: () => toIconComponentIndex({ icons })
   }))
   object.virtual.iconComponents = ({ icons }) => object.virtual(({ testable }) => ({
     test: param => 

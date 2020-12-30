@@ -3,7 +3,7 @@ import { parse } from 'path'
 import { parseFragment, serialize } from 'parse5'
 
 export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) => name, set }) {
-  return dirs.reduce((icons, dir) => {
+  const icons = dirs.reduce((icons, dir) => {
     const files = readdirSync(`./${basePath}/${dir}`),
           fileMetadata = files.map(file => ({
             snakeCased: toSnakeCased({ name: parse(file).name, dir }),
@@ -23,6 +23,10 @@ export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) =>
       ...fromDir,
     ]
   }, [])
+
+  console.log(`Got ${icons.length} icons`)
+
+  return icons
 }
 
 function toComponentName (snakeCased) {
