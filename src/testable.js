@@ -1,7 +1,7 @@
 export default function testable (tests = []) {
   const object = {}
 
-  object.test = testParam => tests.every(test => test(testParam))
+  object.test = param => tests.every(test => test(param))
 
   object.idEndsWith = path => testable([
     ...tests,
@@ -10,7 +10,7 @@ export default function testable (tests = []) {
 
   object.queryIsEmpty = () => testable([
     ...tests,
-    ({ query }) => Object.keys(query) === 0,
+    ({ query }) => Object.keys(query).length === 0,
   ])
 
   return object
