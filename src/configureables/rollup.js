@@ -10,6 +10,7 @@ import virtual from '@baleada/rollup-plugin-virtual'
 import sourceTransform from '@baleada/rollup-plugin-source-transform'
 import createFilesToIndex from '@baleada/source-transform-files-to-index'
 import createFilesToRoutes from '@baleada/source-transform-files-to-routes'
+import testable from '../testable.js'
 
 export default function configureable (config = {}) {
   const object = {}
@@ -92,14 +93,14 @@ export default function configureable (config = {}) {
 
   // Frequently needed virtual files
   object.virtualIndex = (path, createFilesToIndexOptions = {}) => {
-    return object.virtual(({ createIdEndsWith }) => ({
-      test: createIdEndsWith(path),
+    return object.virtual(({ testable }) => ({
+      test: testable.idEndsWith(path).test,
       transform: createFilesToIndex({ test: () => true, ...createFilesToIndexOptions }),
     }))
   }
   object.virtualRoutes = ({ path, router }, createFilesToRoutesOptions = {}) => {
-    return object.virtual(({ createIdEndsWith }) => ({
-      test: createIdEndsWith(path),
+    return object.virtual(({ testable }) => ({
+      test: testable.idEndsWith(path).test,
       transform: createFilesToRoutes(router, { test: () => true, ...createFilesToRoutesOptions }),
     }))
   }
@@ -144,10 +145,6 @@ function ensureArray (unknown) {
 
 function ensureVirtualParams (rawParams) {
   return typeof rawParams === 'function'
-    ? rawParams({ createIdEndsWith })
+    ? rawParams({ testable: testable() })
     : rawParams
-}
-
-function createIdEndsWith (path) {
-  return ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id)
 }

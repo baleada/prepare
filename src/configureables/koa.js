@@ -2,6 +2,7 @@ import virtual from '@baleada/vite-serve-virtual'
 import asVue from '@baleada/vite-serve-as-vue'
 import createFilesToIndex from '@baleada/source-transform-files-to-index'
 import createFilesToRoutes from '@baleada/source-transform-files-to-routes'
+import testable from '../testable.js'
 
 export default function configureable (config = []) {
   const object = {}
@@ -20,14 +21,14 @@ export default function configureable (config = []) {
 
   // Frequently needed virtual files
   object.virtualIndex = (path, createFilesToIndexOptions = {}) => {
-    return object.virtual(({ createIdEndsWith }) => ({
-      test: createIdEndsWith(path),
+    return object.virtual(({ testable }) => ({
+      test: testable.idEndsWith(path).test,
       transform: createFilesToIndex({ test: () => true, importType: 'relativeFromRoot', ...createFilesToIndexOptions })
     }))
   }
   object.virtualRoutes = ({ path, router }, createFilesToRoutesOptions = {}) => {
-    return object.virtual(({ createIdEndsWith }) => ({
-      test: createIdEndsWith(path),
+    return object.virtual(({ testable }) => ({
+      test: testable.idEndsWith(path).test,
       transform: createFilesToRoutes(router, { test: () => true, importType: 'relativeFromRoot', ...createFilesToRoutesOptions })
     }))
   }
@@ -37,10 +38,6 @@ export default function configureable (config = []) {
 
 function ensureVirtualParams (rawParams) {
   return typeof rawParams === 'function'
-    ? rawParams({ createIdEndsWith })
+    ? rawParams({ testable: testable() })
     : rawParams
-}
-
-function createIdEndsWith (path) {
-  return ({ id }) => (new RegExp(`(^|\/)${path}$`)).test(id)
 }
