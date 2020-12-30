@@ -20,13 +20,13 @@ export default function configureable (config = []) {
   object.asVue = (...args) => object.plugin(asVue(...args))
 
   // Frequently needed virtual files
-  object.virtualIndex = (path, createFilesToIndexOptions = {}) => {
+  object.virtual.index = (path, createFilesToIndexOptions = {}) => {
     return object.virtual(({ testable }) => ({
       test: testable.idEndsWith(path).test,
       transform: createFilesToIndex({ test: () => true, importType: 'relativeFromRoot', ...createFilesToIndexOptions })
     }))
   }
-  object.virtualRoutes = ({ path, router }, createFilesToRoutesOptions = {}) => {
+  object.virtual.routes = ({ path, router }, createFilesToRoutesOptions = {}) => {
     return object.virtual(({ testable }) => ({
       test: testable.idEndsWith(path).test,
       transform: createFilesToRoutes(router, { test: () => true, importType: 'relativeFromRoot', ...createFilesToRoutesOptions })

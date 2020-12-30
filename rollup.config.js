@@ -3,7 +3,7 @@ import configureable from './src/configureable.js'
 const shared = configureable('rollup')
         .input('src/index.js')
         .resolve()
-        .virtualIndex('src/index.js', { test: ({ id }) => /src\/\w+\.js$/.test(id) })
+        .virtual.index('src/index.js', { test: ({ id }) => /src\/\w+\.js$/.test(id) })
         .external([
           // rollup
           '@rollup/plugin-babel',
@@ -56,6 +56,8 @@ const shared = configureable('rollup')
           '@babel/plugin-transform-runtime',
 
           // misc
+          'parse5',
+          '@rollup/pluginutils',
           'path',
           'fs',
         ]),

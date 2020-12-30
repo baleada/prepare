@@ -11,6 +11,8 @@ import sourceTransform from '@baleada/rollup-plugin-source-transform'
 import createFilesToIndex from '@baleada/source-transform-files-to-index'
 import createFilesToRoutes from '@baleada/source-transform-files-to-routes'
 import testable from '../testable.js'
+import toIconComponent from '../util/toIconComponent.js'
+import toIconComponentIndex from '../util/toIconComponentIndex.js'
 
 export default function configureable (config = {}) {
   const object = {}
@@ -35,7 +37,6 @@ export default function configureable (config = {}) {
   object.vue = (...args) => object.plugin(vue(...args))
   object.delete = (...args) => object.plugin(del(...args))
   object.analyze = (...args) => object.plugin(analyze(...args))
-  object.virtual = (...args) => object.plugin(virtual(ensureVirtualParams(...args)))
   object.sourceTransform = (...args) => object.plugin(sourceTransform(...args))
 
   // Babel
@@ -91,19 +92,28 @@ export default function configureable (config = {}) {
   object.toTypeScriptConfig = () => ({})
   object.typescript = (...args) => object.plugin(typescript(...args))
 
-  // Frequently needed virtual files
-  object.virtualIndex = (path, createFilesToIndexOptions = {}) => {
-    return object.virtual(({ testable }) => ({
-      test: testable.idEndsWith(path).test,
-      transform: createFilesToIndex({ test: () => true, ...createFilesToIndexOptions }),
-    }))
-  }
-  object.virtualRoutes = ({ path, router }, createFilesToRoutesOptions = {}) => {
-    return object.virtual(({ testable }) => ({
-      test: testable.idEndsWith(path).test,
-      transform: createFilesToRoutes(router, { test: () => true, ...createFilesToRoutesOptions }),
-    }))
-  }
+  // Virtual
+  object.virtual = (...args) => object.plugin(virtual(ensureVirtualParams(...args)))
+  object.virtual.index = (path, createFilesToIndexOptions = {}) => object.virtual(({ testable }) => ({
+    test: testable.idEndsWith(path).test,
+    transform: createFilesToIndex({ test: () => true, ...createFilesToIndexOptions }),
+  }))
+  object.virtual.routes = ({ path, router }, createFilesToRoutesOptions = {}) => object.virtual(({ testable }) => ({
+    test: testable.idEndsWith(path).test,
+    transform: createFilesToRoutes(router, { test: () => true, ...createFilesToRoutesOptions }),
+  }))
+  // TODO: add iconExt param to support more than just .vue
+  object.virtual.iconComponentIndex = ({ icons }) => object.virtual(({ testable }) => ({
+    test: testable.idEndsWith('src/index.js').test,
+    transform: () => toIconComponentIndex(icons)
+  }))
+  object.virtual.iconComponents = ({ icons }) => object.virtual(({ testable }) => ({
+    test: param => 
+    icons.some(({ componentName }) => testable.idEndsWith(`src/components/${componentName}.vue`).test(param))
+    &&
+    testable.queryIsEmpty().test(param),
+    transform: ({ id }) => toIconComponent(icons.find(({ componentName }) => id.endsWith(`${componentName}.vue`)))
+  }))
 
   // Standard configs for formats
   object.esm = ({ file, target }) => {
