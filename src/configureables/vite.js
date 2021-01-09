@@ -1,6 +1,6 @@
 import { resolve } from 'path'
-import koa from './koa.js'
 import rollup from './rollup.js'
+import vue from '@vitejs/plugin-vue'
 
 export default function configureable (config = {}) {
   const object = {}
@@ -15,32 +15,27 @@ export default function configureable (config = {}) {
       ...ensureAliases(rawAliases),
     }
   })
-
-  object.transform = transform => configureable({
-    ...config,
-    transforms: [
-      ...(config.transforms || []),
-      transform,
-    ]
-  })
-
-  object.koa = callback => configureable({
-    ...config,
-    configureServer: callback(koa(config.configureServer || [])),
-  })
   
   object.rollup = callback => configureable({
     ...config,
-    rollupInputOptions: callback(rollup(config.rollupInputOptions || {})),
+    rollupOptions: callback(rollup(config.rollupOptions || {})),
   })
 
-  object.rollup.vue = options => configureable({
+  object.plugin = plugin => configureable({
     ...config,
-    rollupPluginVueOptions: {
-      ...(config.rollupPluginVueOptions || {}),
-      ...options,
-    }
+    plugins: [
+      ...config.plugins || [],
+      plugin
+    ]
   })
+
+  object.vue = (...args) => object.plugin(vue(...args))
+
+  object.resolve = (...args) => object.plugin(rollup().resolve(...args).configure().plugins[0])
+  object.sourceTransform = (...args) => object.plugin(rollup().sourceTransform(...args).configure().plugins[0])
+  object.virtual = (...args) => object.plugin(rollup().virtual(...args).configure().plugins[0])
+  object.virtual.index = (...args) => object.plugin(rollup().virtual.index(...args).configure().plugins[0])
+  object.virtual.routes = (...args) => object.plugin(rollup().virtual.routes(...args).configure().plugins[0])
 
   object.includeDeps = deps => configureable({
     ...config,

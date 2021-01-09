@@ -31,8 +31,7 @@ const shared = configureable('rollup')
           'markdown-it-link-attributes',
           
           // vite
-          '@baleada/vite-serve-virtual',
-          '@baleada/vite-serve-as-vue',
+          '@vitejs/plugin-vue',
 
           // puppeteer
           'puppeteer-core',
@@ -46,7 +45,7 @@ const shared = configureable('rollup')
           // postcss
           'postcss-import',
           'postcss-nested',
-          /^tailwindcss/,
+          /tailwindcss(\/|$)/,
           'postcss-preset-env',
           
           // babel

@@ -1,5 +1,4 @@
 import { babel } from '@rollup/plugin-babel'
-import typescript from '@rollup/plugin-typescript'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
@@ -89,8 +88,8 @@ export default function configureable (config = {}) {
 
 
   // Typescript
-  object.toTypeScriptConfig = () => ({})
-  object.typescript = (...args) => object.plugin(typescript(...args))
+  // object.toTypeScriptConfig = () => ({})
+  // object.typescript = (...args) => object.plugin(typescript(...args))
 
   // Virtual
   object.virtual = (...args) => object.plugin(virtual(ensureVirtualParams(...args)))
