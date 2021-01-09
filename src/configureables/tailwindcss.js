@@ -18,12 +18,10 @@ export default function configureable (config = {}) {
 
   object.purge = paths => configureable({
     ...config,
-    purge: {
-      content: [
-        ...(config.purge?.content ?? []),
-        ...paths,
-      ]
-    }
+    purge: [
+      ...(config.purge ?? []),
+      ...paths,
+    ]
   })
 
   object.theme = theme => {
