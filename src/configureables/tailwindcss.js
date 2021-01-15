@@ -69,7 +69,7 @@ export default function configureable (config = {}) {
     ...config,
     plugins: [
       ...(config.plugins ?? []),
-      createPlugin(plugin),
+      ensurePlugin(plugin),
     ]
   })
   object.forms = () => object.plugin(forms)
@@ -91,6 +91,12 @@ function ensureTheme ({ rawTheme, currentConfig }) {
   return typeof rawTheme === 'function'
     ? rawTheme({ defaultConfig, currentConfig, colors, resolveConfig, themeUtils, linearNumeric, baleada })
     : rawTheme
+}
+
+function ensurePlugin (rawPlugin) {
+  return typeof plugin === 'function'
+    ? createPlugin(rawPlugin)
+    : rawPlugin
 }
 
 function ensureVariants ({ rawVariants, currentConfig }) {
