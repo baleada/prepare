@@ -77,7 +77,8 @@ const highlightsByName = {
       return rehype()
         .stringify({ type: 'root', children })
         .toString()
-        .replace(/({{|}})/g, '<span>$1</span>')
+        .replace(/({{)/g, '<span>{</span><span>{</span>')
+        .replace(/(}})/g, '<span>}</span><span>}</span>')
     } catch (error) {
       return ''
     }
