@@ -49,7 +49,7 @@
     "@baleada/rollup-plugin-source-transform": "^0.4.3",
     "@baleada/rollup-plugin-virtual": "^0.0.13",
     "@baleada/source-transform-files-to-index": "^0.2.4",
-    "@baleada/source-transform-files-to-routes": "^0.4.4",
+    "@baleada/source-transform-files-to-routes": "^0.4.5",
     "@baleada/tailwind-linear-numeric": "^0.10.0",
     "@baleada/tailwind-theme": "^0.3.0",
     "@baleada/tailwind-theme-utils": "^0.6.0",

@@ -95,11 +95,11 @@ export default function configureable (config = {}) {
   object.virtual = (...args) => object.plugin(virtual(ensureVirtualParams(...args)))
   object.virtual.index = (path, createFilesToIndexOptions = {}) => object.virtual(({ testable }) => ({
     test: testable.idEndsWith(path).test,
-    transform: createFilesToIndex({ test: () => true, ...createFilesToIndexOptions }),
+    transform: createFilesToIndex(createFilesToIndexOptions),
   }))
   object.virtual.routes = ({ path, router }, createFilesToRoutesOptions = {}) => object.virtual(({ testable }) => ({
     test: testable.idEndsWith(path).test,
-    transform: createFilesToRoutes(router, { test: () => true, ...createFilesToRoutesOptions }),
+    transform: createFilesToRoutes(router, createFilesToRoutesOptions),
   }))
   // TODO: add iconExt param to support more than just .vue
   object.virtual.iconComponentIndex = ({ icons }) => object.virtual(({ testable }) => ({
