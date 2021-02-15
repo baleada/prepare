@@ -46,6 +46,7 @@ const shared = configureable('rollup')
           'postcss-import',
           'postcss-nested',
           /tailwindcss(\/|$)/,
+          'autoprefixer',
           'postcss-preset-env',
           
           // babel
