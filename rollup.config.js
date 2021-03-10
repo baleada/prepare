@@ -10,6 +10,7 @@ const shared = configureable('rollup')
           '@rollup/plugin-commonjs',
           '@rollup/plugin-json',
           '@rollup/plugin-node-resolve',
+          '@rollup/plugin-multi-entry',
           '@rollup/plugin-typescript',
           'rollup-plugin-delete',
           'rollup-plugin-vue',

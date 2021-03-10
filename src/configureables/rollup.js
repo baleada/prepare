@@ -1,5 +1,6 @@
 import { babel } from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
+import multi from '@rollup/plugin-multi-entry'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import del from 'rollup-plugin-delete'
@@ -17,7 +18,7 @@ export default function configureable (config = {}) {
   const object = {}
 
   // Return the final config
-  object.configure = () => config  
+  object.configure = () => config
 
   // Generic
   object.input = file => configureable({ ...config, input: file }),
@@ -31,6 +32,7 @@ export default function configureable (config = {}) {
   
   // Simple plugin additions
   object.resolve = (...args) => object.plugin(resolve(...args))
+  object.multi = (...args) => object.plugin(multi(...args))
   object.commonjs = (...args) => object.plugin(commonjs(...args))
   object.json = (...args) => object.plugin(json(...args))
   object.vue = (...args) => object.plugin(vue(...args))
