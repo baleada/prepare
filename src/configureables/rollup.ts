@@ -10,7 +10,7 @@ import virtual from '@baleada/rollup-plugin-virtual'
 import sourceTransform from '@baleada/rollup-plugin-source-transform'
 import createFilesToIndex from '@baleada/source-transform-files-to-index'
 import createFilesToRoutes from '@baleada/source-transform-files-to-routes'
-import { Testable } from '../Testable.js'
+import { Testable } from '../Testable'
 import toIconComponent from '../util/toIconComponent.js'
 import toIconComponentIndex from '../util/toIconComponentIndex.js'
 import type {
@@ -217,6 +217,6 @@ function ensureArray (unknown: unknown): any[] {
 
 function ensureVirtualParams (rawParams) {
   return typeof rawParams === 'function'
-    ? rawParams({ testable: testable() })
+    ? rawParams({ testable: new Testable() })
     : rawParams
 }
