@@ -10,12 +10,18 @@ import virtual from '@baleada/rollup-plugin-virtual'
 import sourceTransform from '@baleada/rollup-plugin-source-transform'
 import createFilesToIndex from '@baleada/source-transform-files-to-index'
 import createFilesToRoutes from '@baleada/source-transform-files-to-routes'
-import testable from '../testable.js'
+import { Testable } from '../Testable.js'
 import toIconComponent from '../util/toIconComponent.js'
 import toIconComponentIndex from '../util/toIconComponentIndex.js'
+import type {
+  InputOptions,
+  OutputOptions,
+  ExternalOption,
+  Plugin
+} from 'rollup'
 
 export default function configureable (config = {}) {
-  const object = {}
+  const object: Record<string, Function> = {}
 
   // Return the final config
   object.configure = () => config
@@ -25,10 +31,6 @@ export default function configureable (config = {}) {
   object.output = output => configureable(push({ config, array: 'output', value: output }))
   object.external = external => configureable(push({ config, array: 'external', value: external }))
   object.plugin = plugin => configureable(push({ config, array: 'plugins', value: plugin }))
-  object.plugin.api = {
-    createFilesToIndex,
-    createFilesToRoutes,
-  }
   
   // Simple plugin additions
   object.resolve = (...args) => object.plugin(resolve(...args))
@@ -138,7 +140,66 @@ export default function configureable (config = {}) {
   return object
 }
 
-export function push ({ config, array, value }) {
+class Rollup {
+  private config: InputOptions
+  private virtual: Virtual
+  constructor (config = {}) {
+    this.config = config
+    this.virtual = new Virtual()
+  }
+
+  configure () {
+    return this.config
+  }
+
+  input (file: string) {
+    this.config.input = file
+    return this
+  }
+  output (output: OutputOptions | OutputOptions[]) {
+    this.config = push<OutputOptions | OutputOptions[]>({ config: this.config, array: 'output', value: output })
+    return this
+  }
+  external (external: ExternalOption) {
+    this.config = push<ExternalOption>({ config: this.config, array: 'external', value: external })
+    return this
+  }
+  plugin (plugin: Plugin) {
+    this.config = push<Plugin>({ config: this.config, array: 'plugins', value: plugin })
+    return this
+  }
+  resolve (...args) {
+    return this.plugin(resolve(...args))
+  }
+  multi (...args) {
+    return this.plugin(multi(...args))
+  }
+  commonjs (...args) {
+    return this.plugin(commonjs(...args))
+  }
+  json (...args) {
+    return this.plugin(json(...args))
+  }
+  vue (...args) {
+    return this.plugin(vue(...args))
+  }
+  delete (...args) {
+    return this.plugin(del(...args))
+  }
+  analyze (...args) {
+    return this.plugin(analyze(...args))
+  }
+  sourceTransform (...args) {
+    return this.plugin(sourceTransform(...args))
+  }
+}
+
+class Virtual {
+  
+}
+
+
+export function push<Value> ({ config, array, value }: { config: InputOptions, array: string, value: Value }): InputOptions {
   return {
     ...config,
     [array]: [
@@ -148,7 +209,7 @@ export function push ({ config, array, value }) {
   }
 }
 
-function ensureArray (unknown) {
+function ensureArray (unknown: unknown): any[] {
   return Array.isArray(unknown)
     ? unknown
     : [unknown]
