@@ -1,9 +1,23 @@
 import { readdirSync, readFileSync } from 'fs'
 import { resolve, parse } from 'path'
 import { parseFragment, serialize } from 'parse5'
+import type { DefaultTreeParentNode, DefaultTreeElement } from 'parse5'
+import type { Test } from './Testable'
 
-export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) => name, set, test = () => true }) {
-  const icons = dirs.reduce((icons, dir) => {
+export type Icon = {
+  componentName: string,
+  contents: string,
+  viewBox: string,
+}
+
+export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) => name, set, test = () => true }: {
+  dirs: string[],
+  basePath: string,
+  toSnakeCased: ({ name, dir }: { name: string, dir: string }) => string,
+  set: string,
+  test: Test
+}) {
+  const icons = dirs.reduce<Icon[]>((icons, dir) => {
     const files = readdirSync(`./${basePath}/${dir}`)
             .filter(file => file.endsWith('.svg'))
             .filter(file => test({ id: resolve('', basePath, dir, file) })),
@@ -12,11 +26,11 @@ export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) =>
             contents: readFileSync(`./${basePath}/${dir}/${file}`, 'utf8'),
           })),
           fromDir = fileMetadata.map(({ snakeCased, contents }) => {
-            const { childNodes: { 0: svg } } = parseFragment(contents)
+            const { childNodes: { 0: svg } } = parseFragment(contents) as DefaultTreeParentNode
             return {
               componentName: `${set}${toComponentName(snakeCased)}`,
               contents: serialize(svg),
-              viewBox: svg.attrs.find(({ name }) => name.toLowerCase() === 'viewbox')?.value,
+              viewBox: (svg as DefaultTreeElement).attrs.find(({ name }) => name.toLowerCase() === 'viewbox')?.value,
             }
           })
     
@@ -31,18 +45,18 @@ export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) =>
   return icons
 }
 
-function toComponentName (snakeCased) {
+function toComponentName (snakeCased: string): string {
   return toComponentCase(snakeCased)
 }
 
-function toComponentCase (snakeCased) {
+function toComponentCase (snakeCased: string): string {
   return snakeCased
     .split('-')
     .map(word => capitalize(word))
     .join('')
 }
 
-function capitalize (word) {
+function capitalize (word: string): string {
   if (!word) {
     return word
   }

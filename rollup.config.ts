@@ -1,6 +1,6 @@
-import configureable from './src/configureable.js'
+import { configureable } from './src/configureable'
 
-const shared = configureable('rollup')
+const shared = new configureable.Rollup()
         .input('src/index.js')
         .resolve()
         .virtual.index('src/index.js', { test: ({ id }) => /src\/\w+\.js$/.test(id) })

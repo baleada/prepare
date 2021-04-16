@@ -58,6 +58,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-multi-entry": "^4.0.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
+    "@rollup/plugin-typescript": "^8.2.1",
     "@tailwindcss/forms": "^0.2.1",
     "@vitejs/plugin-vue": "^1.0.4",
     "autoprefixer": "^10.2.4",
@@ -72,6 +73,7 @@
     "rehype": "^11.0.0",
     "rollup-plugin-analyzer": "^3.3.0",
     "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-dts": "^3.0.1",
     "rollup-plugin-vue": "^6.0.0-beta.10",
     "tailwindcss": "^2.0.2"
   }

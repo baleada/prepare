@@ -1,14 +1,19 @@
 import { createFilter } from '@rollup/pluginutils'
 import type { FilterPattern } from '@rollup/pluginutils'
 
+
+/**
+ * Testable exposes methods that are commonly needed during bundling to decide 
+ * whether or not a module should be transformed.
+ */
 export class Testable {
-  constructor (private tests: ((...args: any[]) => boolean)[] = []) {}
+  constructor (private tests: Test[] = []) {}
   
-  test (value: any) {
-    return this.tests.every(test => test(value))
+  test (api: TestApi) {
+    return this.tests.every(test => test(api))
   }
 
-  suite (test: (...args: any[]) => boolean) {
+  suite (test: Test) {
     this.tests = [...this.tests, test]
     return this
   }
@@ -39,3 +44,11 @@ export class Testable {
     return this.filter({ exclude })
   }
 }
+
+export type TestApi = {
+  id?: string,
+  source?: string,
+  query?: string,
+}
+
+export type Test = (api: TestApi) => boolean
