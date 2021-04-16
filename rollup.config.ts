@@ -1,9 +1,13 @@
 import { configureable } from './src/configureable'
 
 const shared = new configureable.Rollup()
-        .input('src/index.js')
+        .input([
+          'src/configureable.ts',
+          'src/getIcons.ts',
+          'src/Testable.ts',
+          'src/withPuppeteer.ts'
+        ])
         .resolve()
-        .virtual.index('src/index.js', { test: ({ id }) => /src\/\w+\.js$/.test(id) })
         .external([
           // rollup
           '@rollup/plugin-babel',
@@ -65,7 +69,7 @@ const shared = new configureable.Rollup()
       esm = shared
         .delete({ targets: 'lib/*', verbose: true })
         .esm({ file: 'lib/index.js', target: 'node' })
-        .analyze()
+        .analyzer()
         .configure(),
       cjs = shared
         .cjs({ file: 'lib/index.cjs' })
