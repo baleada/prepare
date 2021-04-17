@@ -5,7 +5,8 @@ const shared = new configureable.Rollup()
           'src/configureable.ts',
           'src/getIcons.ts',
           'src/Testable.ts',
-          'src/withPuppeteer.ts'
+          'src/withPuppeteer.ts',
+          'src/virtual-util.ts',
         ])
         .resolve()
         .external([
