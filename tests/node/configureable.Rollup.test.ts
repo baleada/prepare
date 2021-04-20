@@ -102,6 +102,14 @@ suite(`configures delete plugin`, () => {
   assert.is(value.plugins.length, 1)
 })
 
+suite(`configures dts plugin`, () => {
+  const value = new Configureable()
+          .dts()
+          .configure()
+
+  assert.is(value.plugins.length, 1)
+})
+
 suite(`configures vue plugin`, () => {
   const value = new Configureable()
           .vue()

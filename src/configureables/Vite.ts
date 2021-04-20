@@ -12,21 +12,21 @@ import type {
 
 export class Vite {
   private config: UserConfig & BuildOptions
-  virtual: Virtual
+  virtual: VirtualMethod
   constructor (config = {}) {
     this.config = config
-    this.virtual = createVirtual()
+    this.virtual = createVirtualMethod(this.plugin.bind(this))
   }
 
   configure () {
     return this.config
   }
 
-  alias (aliases) {
+  alias (aliasesOrConfigureAliases: AliasOptions | (({ resolve, basePath }: { resolve: Resolve, basePath: string }) => AliasOptions)) {
     this.config.resolve = {
       alias: {
         ...(this.config.resolve?.alias ?? {}),
-        ...ensureAliases(aliases),
+        ...ensureAliases(aliasesOrConfigureAliases),
       }
     }
 
@@ -57,8 +57,8 @@ export class Vite {
     return this
   }
   
-  rollup (configureRollup: ({ rollup }: { rollup: Rollup }) => BuildOptions['rollupOptions']) {
-    this.config.rollupOptions = configureRollup({ rollup: new Rollup() })
+  rollup (configureRollup: ({ configureable }: { configureable: Rollup }) => BuildOptions['rollupOptions']) {
+    this.config.rollupOptions = configureRollup({ configureable: new Rollup() })
     return this
   }
 
@@ -96,19 +96,24 @@ export class Vite {
   // Virtual handled separately, to allow for sub methods
 }
 
-type Virtual = {
+type VirtualMethod = {
   (options: Record<any, any>): Vite,
   routes: ({ path, router }: { path: string, router: string }, createFilesToRoutesOptions?: Record<any, any>) => Vite,
 }
 
-function createVirtual (): Virtual {
+function createVirtualMethod (plugin: (plugin: PluginOption) => Vite): VirtualMethod {
   function virtual (options: Record<any, any>) {
-    return (this as Vite).plugin(virtual(options))
+    return plugin(
+      new Rollup()
+        .virtual(options)
+        .configure()
+        .plugins[0]
+    )
   }
 
   // TODO: better types
   function routes ({ path, router }: { path: string, router: string }, createFilesToRoutesOptions: Record<any, any> = {}) {
-    return (this as Vite).plugin(
+    return plugin(
       new Rollup()
         .virtual.routes({ path, router }, createFilesToRoutesOptions)
         .configure()
