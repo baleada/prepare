@@ -66,6 +66,7 @@ const external = [
         .input([
           'src/configureable.ts',
           'src/getIcons.ts',
+          'src/empty.ts',
           'src/Testable.ts',
           'src/withPuppeteer.ts',
           'src/virtual-util.ts',
@@ -85,6 +86,7 @@ const external = [
         .input([
           'types/configureable.d.ts',
           'types/getIcons.d.ts',
+          'types/empty.d.ts',
           'types/Testable.d.ts',
           'types/withPuppeteer.d.ts',
           'types/virtual.d-util.ts',
