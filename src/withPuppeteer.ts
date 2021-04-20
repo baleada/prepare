@@ -11,7 +11,7 @@ const defaultOptions: Options = {
   contextKey: 'puppeteer',
 }
 
-export default function withPuppeteer (suite: Test, options = {}) {
+export function withPuppeteer (suite: Test, options = {}) {
   const { launch: rawLaunch, contextKey } = { ...defaultOptions, ...options },
         launch = ensureLaunch(rawLaunch)
 

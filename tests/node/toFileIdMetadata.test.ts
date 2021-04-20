@@ -1,6 +1,6 @@
 import { suite as createSuite } from 'uvu'
 import * as assert from 'uvu/assert'
-import toFileIdMetadata from '../../src/util/toFileIdMetadata.js'
+import { toFileIdMetadata } from '../../src/virtual-util'
 import { resolve } from 'path'
 
 const suite = createSuite('toFileIdMetadata (node)')

@@ -1,14 +1,14 @@
 import { suite as createSuite } from 'uvu'
 import * as assert from 'uvu/assert'
 import { resolve } from 'path'
-import toIds from '../../src/util/toIds.js'
+import { toIds } from '../../src/virtual-util'
 
 const suite = createSuite('toIds (node)')
 
 const basePath = resolve('')
 
 suite('recurses through child folders', () => {
-  const value = toIds(`${basePath}/tests/stubs/files`),
+  const value = toIds({ dir: `${basePath}/tests/stubs/files` }),
         expected = [
           `${basePath}/tests/stubs/files/bar`,
           `${basePath}/tests/stubs/files/bar/baz.md`,
