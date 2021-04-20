@@ -61,7 +61,7 @@ const launchApi: LaunchApi = {
   }
 }
 
-export function ensureLaunch (rawLaunch: Options['launch']): puppeteer.LaunchOptions {
+function ensureLaunch (rawLaunch: Options['launch']): puppeteer.LaunchOptions {
   return typeof rawLaunch === 'function'
     ? rawLaunch(launchApi)
     : rawLaunch

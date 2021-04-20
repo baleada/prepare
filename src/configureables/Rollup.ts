@@ -26,8 +26,7 @@ import createFilesToIndex from '@baleada/source-transform-files-to-index'
 // @ts-ignore
 import createFilesToRoutes from '@baleada/source-transform-files-to-routes'
 import { Testable } from '../Testable'
-import toIconComponent from '../util/toIconComponent.js'
-import toIconComponentIndex from '../util/toIconComponentIndex.js'
+import { toIconComponent, toIconComponentIndex } from '../virtual-util'
 import type {
   InputOptions,
   OutputOptions,

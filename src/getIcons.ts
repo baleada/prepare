@@ -10,6 +10,9 @@ export type Icon = {
   viewBox: string,
 }
 
+/**
+ * Given directories filled with SVG icons, retrieves the icons' component names, contents, and viewBox.
+ */
 export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) => name, set, test = () => true }: {
   dirs: string[],
   basePath: string,

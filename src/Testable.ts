@@ -1,6 +1,14 @@
 import { createFilter } from '@rollup/pluginutils'
 import type { FilterPattern } from '@rollup/pluginutils'
+import type { ParsedQuery } from 'query-string'
 
+export type TestApi = {
+  id?: string,
+  source?: string,
+  query?: ParsedQuery<any>,
+}
+
+export type Test = (api: TestApi) => boolean
 
 /**
  * Testable exposes methods that are commonly needed during bundling to decide 
@@ -44,11 +52,3 @@ export class Testable {
     return this.filter({ exclude })
   }
 }
-
-export type TestApi = {
-  id?: string,
-  source?: string,
-  query?: string,
-}
-
-export type Test = (api: TestApi) => boolean
