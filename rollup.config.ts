@@ -101,7 +101,7 @@ export default [
 // STANDARD CONFIG
 // For when lib/index.js is not available, until issues with src/configureable import are fixed.
 
-// import multi from '@rollup/plugin-multi-entry'
+// import multiEntry from '@rollup/plugin-multi-entry'
 // import resolve from '@rollup/plugin-node-resolve'
 // import del from 'rollup-plugin-delete'
 // import analyzer from 'rollup-plugin-analyzer'
@@ -182,7 +182,7 @@ export default [
 //   ],
 //   plugins: [
 //     del({ targets: 'lib/*', verbose: true }),
-//     multi(),
+//     multiEntry(),
 //     resolve(),
 //     typescript(),
 //     babel({

@@ -2,33 +2,33 @@ import { babel } from '@rollup/plugin-babel'
 import type { RollupBabelInputPluginOptions } from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
 import type { RollupNodeResolveOptions as ResolveOptions } from '@rollup/plugin-node-resolve'
-import multi from '@rollup/plugin-multi-entry'
-import commonjs from '@rollup/plugin-commonjs'
+import * as multiEntry from '@rollup/plugin-multi-entry'
+import * as commonjs from '@rollup/plugin-commonjs'
 import type { RollupCommonJSOptions as CommonJSOptions } from '@rollup/plugin-commonjs'
-import json from '@rollup/plugin-json'
+import * as json from '@rollup/plugin-json'
 import type { RollupJsonOptions as JsonOptions } from '@rollup/plugin-json'
 import typescript from '@rollup/plugin-typescript'
 import type { RollupTypescriptOptions as TypescriptOptions } from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
 import type { Options as DtsOptions } from 'rollup-plugin-dts'
-import del from 'rollup-plugin-delete'
+import * as del from 'rollup-plugin-delete'
 import type { Options as DeleteOptions } from 'rollup-plugin-delete'
-import vue from 'rollup-plugin-vue'
+import * as vue from 'rollup-plugin-vue'
 import type { Options as VueOptions } from 'rollup-plugin-vue'
 import analyzer from 'rollup-plugin-analyzer'
 import type { AnalyzerOptions } from 'rollup-plugin-analyzer'
 // @ts-ignore
-import virtual from '@baleada/rollup-plugin-virtual'
+import * as virtual from '@baleada/rollup-plugin-virtual'
 // @ts-ignore
-import sourceTransform from '@baleada/rollup-plugin-source-transform'
+import * as sourceTransform from '@baleada/rollup-plugin-source-transform'
 // @ts-ignore
-import createFilesToIndex from '@baleada/source-transform-files-to-index'
+import * as createFilesToIndex from '@baleada/source-transform-files-to-index'
 // @ts-ignore
-import createFilesToRoutes from '@baleada/source-transform-files-to-routes'
+import * as createFilesToRoutes from '@baleada/source-transform-files-to-routes'
 import { Testable } from '../Testable'
 import { toIconComponent, toIconComponentIndex } from '../virtual-util'
 import type {
-  InputOptions,
+  RollupOptions,
   OutputOptions,
   ExternalOption,
   Plugin,
@@ -36,20 +36,20 @@ import type {
 import type { Icon } from '../getIcons'
 
 export class Rollup {
-  private config: InputOptions
-  virtual: Virtual
+  private config: RollupOptions
+  virtual: VirtualMethod
   constructor (config = {}) {
     this.config = config
-    this.virtual = createVirtual()
+    this.virtual = createVirtualMethod({ instance: this })
   }
 
   configure () {
     return this.config
   }
 
-  input (file: string | string[]) {
-    this.config.input = file
-    return typeof file === 'string' ? this : this.multi()
+  input (fileOrFiles: string | string[]) {
+    this.config.input = fileOrFiles
+    return typeof fileOrFiles === 'string' ? this : this.multiEntry()
   }
   output (output: OutputOptions | OutputOptions[]) {
     this.config = push<OutputOptions | OutputOptions[]>({ config: this.config, array: 'output', value: output })
@@ -66,8 +66,8 @@ export class Rollup {
   resolve (options?: ResolveOptions) {
     return this.plugin(resolve(options))
   }
-  multi (options?: any) {
-    return this.plugin(multi(options))
+  multiEntry (options?: any) {
+    return this.plugin(multiEntry(options))
   }
   commonjs (options?: CommonJSOptions) {
     return this.plugin(commonjs(options))
@@ -156,7 +156,7 @@ export class Rollup {
   }
 }
 
-type Virtual = {
+type VirtualMethod = {
   (options: Record<any, any>): Rollup,
   index: (path: string, createFilesToIndexOptions?: Record<any, any>) => Rollup
   routes: ({ path, router }: { path: string, router: string }, createFilesToRoutesOptions?: Record<any, any>) => Rollup
@@ -164,8 +164,8 @@ type Virtual = {
   iconComponents: (...args: any[]) => Rollup
 }
 
-function createVirtual (): Virtual {
-  function virtual (options: Record<any, any>) {
+function createVirtualMethod ({ instance }: { instance: Rollup }): VirtualMethod {
+  function method (options: Record<any, any>) {
     return (this as Rollup).plugin(virtual(options))
   }
 
@@ -201,19 +201,19 @@ function createVirtual (): Virtual {
     })
   }
 
-  virtual.index = index
-  virtual.routes = routes
-  virtual.iconComponentIndex = iconComponentIndex
-  virtual.iconComponents = iconComponents
+  method.index = index.bind(instance)
+  method.routes = routes.bind(instance)
+  method.iconComponentIndex = iconComponentIndex.bind(instance)
+  method.iconComponents = iconComponents.bind(instance)
   
-  return virtual
+  return method.bind(instance)
 }
 
-export function push<Value> ({ config, array, value }: { config: InputOptions, array: string, value: Value }): InputOptions {
+export function push<Value> ({ config, array, value }: { config: RollupOptions, array: 'plugins' | 'output' | 'external', value: Value }): RollupOptions {
   return {
     ...config,
     [array]: [
-      ...(config[array] || []),
+      ...((config[array] as any[]) || []),
       ...ensureArray(value)
     ]
   }

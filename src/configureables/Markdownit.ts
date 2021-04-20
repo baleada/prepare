@@ -12,6 +12,10 @@ import rehype from 'rehype'
 export class Markdownit {
   constructor (private config: MarkdownIt.Options & { plugins?: ([MarkdownIt.PluginWithOptions, any])[] } = { plugins: [] }) {}
 
+  toConfig () { // pretty much used for testing only
+    return this.config
+  }
+
   configure = () => {
     const { plugins = [], ...options } = this.config,
           md = new MarkdownIt(options) 
