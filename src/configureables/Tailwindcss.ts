@@ -29,12 +29,7 @@ type Config = {
     //   content?: string[],
     //   options?: PurgeCSS['options'],
     // },
-  theme?: {
-    [plugin: string]: TailwindThemeValue
-  },
-  extend?: {
-    [plugin: string]: TailwindThemeValue
-  },
+  theme?: Record<string, TailwindThemePluginConfig | TailwindTheme>,
   variants?: {
     [plugin: string]: string[],
   }
@@ -42,22 +37,15 @@ type Config = {
   important?: true
 }
 
-type TailwindThemeValue = {
-  [suffix: string]: 
-    string // Most plugins
-    |
-    TailwindFontConfig // custom lineheight
-    |
-    string[] // Font family
-    |
-    {
-      [hue: string]: {
-        [shade: string]: string
-      }
-    } // Colors
-} | TailwindThemeClosure
-
+type TailwindTheme = { [plugin: string]: TailwindThemePluginConfig }
+type TailwindThemePluginConfig = Record<string | number, TailwindThemeValue | TailwindThemeClosure>
 type TailwindThemeClosure = (api: any) => TailwindThemeValue
+type TailwindThemeValue = 
+  string // Most plugins
+  | TailwindFontConfig // custom lineheight
+  | string[] // Font family
+  | { [hue: string]: Record<string | number, string> } // Colors
+
 
 type TailwindPlugin = TailwindPluginWithOptions | TailwindPluginWithoutOptions // TODO: Improve
 type TailwindPluginWithOptions = Function
@@ -116,7 +104,7 @@ export class Tailwindcss {
     return this
   }
 
-  theme (themeOrConfigureTheme: Config['theme'] | ((api: ConfigureThemeApi) => Config['theme'])) {
+  theme (themeOrConfigureTheme: TailwindTheme | ((api: ConfigureThemeApi) => TailwindTheme)) {
     const ensuredTheme = ensureTheme({ themeRaw: themeOrConfigureTheme, currentConfig: this.config })
 
     this.config.theme = {
@@ -131,13 +119,15 @@ export class Tailwindcss {
     return this.theme(baleada)
   }
 
-  extend (themeOrConfigureTheme: Config['theme'] | ((api: ConfigureThemeApi) => Config['theme'])) {
-    const ensuredExtend = ensureTheme({ themeRaw: themeOrConfigureTheme, currentConfig: this.config })
+  extend (extendOrConfigureExtend: TailwindTheme | ((api: ConfigureThemeApi) => TailwindTheme)) {
+    const ensuredExtend = ensureTheme({ themeRaw: extendOrConfigureExtend, currentConfig: this.config })
     
-    this.config.extend = {
-      ...(this.config.extend ?? {}),
-      ...ensuredExtend,
-    }
+    return this.theme({
+      extend: {
+        ...((this.config.theme?.extend as TailwindTheme) ?? {}),
+        ...ensuredExtend,
+      } as unknown as TailwindThemePluginConfig
+    })
   }
 
   forms () {
@@ -170,7 +160,7 @@ type ConfigureThemeApi = {
   baleada: any,
 }
 
-function ensureTheme ({ themeRaw, currentConfig }: { themeRaw: Config['theme'] | ((api: ConfigureThemeApi) => Config['theme']), currentConfig: Config }): Config['theme'] {
+function ensureTheme ({ themeRaw, currentConfig }: { themeRaw: TailwindTheme | ((api: ConfigureThemeApi) => TailwindTheme), currentConfig: Config }): TailwindTheme {
   return typeof themeRaw === 'function'
     ? themeRaw({ defaultConfig, currentConfig, colors, resolveConfig, themeUtils, linearNumeric, baleada })
     : themeRaw
