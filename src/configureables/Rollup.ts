@@ -17,10 +17,10 @@ import vue from 'rollup-plugin-vue'
 import type { Options as VueOptions } from 'rollup-plugin-vue'
 import analyzer from 'rollup-plugin-analyzer'
 import type { AnalyzerOptions } from 'rollup-plugin-analyzer'
-// @ts-ignore
-import pluginVirtual from '@baleada/rollup-plugin-virtual'
-// @ts-ignore
-import sourceTransform from '@baleada/rollup-plugin-source-transform'
+import { virtual as pluginVirtual } from '@baleada/rollup-plugin-virtual'
+import type { Options as VirtualOptions } from '@baleada/rollup-plugin-virtual'
+import { sourceTransform } from '@baleada/rollup-plugin-source-transform'
+import type { Options as SourceTransformOptions } from '@baleada/rollup-plugin-source-transform'
 // @ts-ignore
 import createFilesToIndex from '@baleada/source-transform-files-to-index'
 // @ts-ignore
@@ -35,6 +35,9 @@ import type {
 } from 'rollup'
 import type { Icon } from '../getIcons'
 
+/**
+ * Configuration API for Rollup
+ */
 export class Rollup {
   private config: RollupOptions
   virtual: VirtualMethod
@@ -43,7 +46,7 @@ export class Rollup {
     this.virtual = createVirtualMethod(this.addVirtual.bind(this))
   }
 
-  private addVirtual (options?: Record<any, any>) {
+  private addVirtual (options?: VirtualOptions) {
     return this.plugin(pluginVirtual(options))
   }
 
@@ -88,7 +91,7 @@ export class Rollup {
   analyzer (options?: AnalyzerOptions) {
     return this.plugin(analyzer(options))
   }
-  sourceTransform (options?: any) {
+  sourceTransform (options?: SourceTransformOptions) {
     return this.plugin(sourceTransform(options))
   }
   typescript (options?: TypescriptOptions) {
@@ -161,15 +164,15 @@ export class Rollup {
 }
 
 type VirtualMethod = {
-  (options: Record<any, any>): Rollup,
+  (options: VirtualOptions): Rollup,
   index: (path: string, createFilesToIndexOptions?: Record<any, any>) => Rollup
   routes: ({ path, router }: { path: string, router: string }, createFilesToRoutesOptions?: Record<any, any>) => Rollup
   iconComponentIndex: (...args: any[]) => Rollup
   iconComponents: (...args: any[]) => Rollup
 }
 
-function createVirtualMethod (addVirtual: (options: Record<any, any>) => Rollup): VirtualMethod {
-  function virtual (options?: Record<any, any>) {
+function createVirtualMethod (addVirtual: (options: VirtualOptions) => Rollup): VirtualMethod {
+  function virtual (options?: VirtualOptions) {
     return addVirtual(options)
   }
 
