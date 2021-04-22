@@ -95,6 +95,14 @@ suite(`configures vue`, context => {
   assert.is(value.plugins.length, 1)
 })
 
+suite(`configures pages`, context => {
+  const value = new Configureable()
+          .pages()
+          .configure()
+
+  assert.is(value.plugins.length, 1)
+})
+
 suite(`configures resolve`, context => {
   const value = new Configureable()
           .resolve()
@@ -114,14 +122,6 @@ suite(`configures sourceTransform`, context => {
 suite(`configures virtual plugin`, () => {
   const value = new Configureable()
           .virtual({ test: () => true, transform: () => '' })
-          .configure()
-
-  assert.is(value.plugins.length, 1)
-})
-
-suite(`configures virtual routes`, () => {
-  const value = new Configureable()
-          .virtual.routes({ path: 'src/routes.js', router: 'vue' })
           .configure()
 
   assert.is(value.plugins.length, 1)

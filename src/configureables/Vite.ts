@@ -2,7 +2,10 @@ import { resolve } from 'path'
 import { Rollup } from './Rollup'
 import vue from '@vitejs/plugin-vue'
 import type { Options as VueOptions } from '@vitejs/plugin-vue'
+import pages from 'vite-plugin-pages'
+import type { UserOptions as PagesOptions } from 'vite-plugin-pages'
 import type { RollupNodeResolveOptions as ResolveOptions } from '@rollup/plugin-node-resolve'
+import type { Options as VirtualOptions } from '@baleada/rollup-plugin-virtual'
 import type {
   UserConfig,
   AliasOptions,
@@ -74,6 +77,10 @@ export class Vite {
   vue (options?: VueOptions) {
     return this.plugin(vue(options))
   }
+  
+  pages (options?: PagesOptions) {
+    return this.plugin(pages(options))
+  }
 
   resolve (options?: ResolveOptions) {
     return this.plugin(
@@ -97,12 +104,11 @@ export class Vite {
 }
 
 type VirtualMethod = {
-  (options: Record<any, any>): Vite,
-  routes: ({ path, router }: { path: string, router: string }, createFilesToRoutesOptions?: Record<any, any>) => Vite,
+  (options: VirtualOptions): Vite,
 }
 
 function createVirtualMethod (plugin: (plugin: PluginOption) => Vite): VirtualMethod {
-  function virtual (options: Record<any, any>) {
+  function virtual (options: VirtualOptions) {
     return plugin(
       new Rollup()
         .virtual(options)
@@ -110,18 +116,6 @@ function createVirtualMethod (plugin: (plugin: PluginOption) => Vite): VirtualMe
         .plugins[0]
     )
   }
-
-  // TODO: better types
-  function routes ({ path, router }: { path: string, router: string }, createFilesToRoutesOptions: Record<any, any> = {}) {
-    return plugin(
-      new Rollup()
-        .virtual.routes({ path, router }, createFilesToRoutesOptions)
-        .configure()
-        .plugins[0]
-    )
-  }
-
-  virtual.routes = routes
   
   return virtual
 }

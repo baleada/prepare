@@ -60,8 +60,6 @@
     "@baleada/markdown-it-text-content": "^0.1.2",
     "@baleada/rollup-plugin-source-transform": "^0.5.0",
     "@baleada/rollup-plugin-virtual": "^0.1.0",
-    "@baleada/source-transform-files-to-index": "^0.2.4",
-    "@baleada/source-transform-files-to-routes": "^0.4.6",
     "@baleada/tailwind-linear-numeric": "^0.10.0",
     "@baleada/tailwind-theme": "^0.3.0",
     "@baleada/tailwind-theme-utils": "^0.6.0",
@@ -90,6 +88,7 @@
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^3.0.1",
     "rollup-plugin-vue": "^6.0.0-beta.10",
-    "tailwindcss": "^2.1.1"
+    "tailwindcss": "^2.1.1",
+    "vite-plugin-pages": "^0.9.5"
   }
 }

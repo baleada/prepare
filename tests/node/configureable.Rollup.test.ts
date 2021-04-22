@@ -134,22 +134,6 @@ suite(`configures virtual plugin`, () => {
   assert.is(value.plugins.length, 1)
 })
 
-suite(`configures virtual index`, () => {
-  const value = new Configureable()
-          .virtual.index('index.js')
-          .configure()
-
-  assert.is(value.plugins.length, 1)
-})
-
-suite(`configures virtual routes`, () => {
-  const value = new Configureable()
-          .virtual.routes({ path: 'src/routes.js', router: 'vue' })
-          .configure()
-
-  assert.is(value.plugins.length, 1)
-})
-
 suite(`configures sourceTransform plugin`, () => {
   const value = new Configureable()
           .sourceTransform({ test: () => true, transform: () => '' })

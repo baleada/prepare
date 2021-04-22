@@ -21,10 +21,6 @@ import { virtual as pluginVirtual } from '@baleada/rollup-plugin-virtual'
 import type { Options as VirtualOptions } from '@baleada/rollup-plugin-virtual'
 import { sourceTransform } from '@baleada/rollup-plugin-source-transform'
 import type { Options as SourceTransformOptions } from '@baleada/rollup-plugin-source-transform'
-// @ts-ignore
-import createFilesToIndex from '@baleada/source-transform-files-to-index'
-// @ts-ignore
-import createFilesToRoutes from '@baleada/source-transform-files-to-routes'
 import { Testable } from '../Testable'
 import { toIconComponent, toIconComponentIndex } from '../virtual-util'
 import type {
@@ -165,8 +161,6 @@ export class Rollup {
 
 type VirtualMethod = {
   (options: VirtualOptions): Rollup,
-  index: (path: string, createFilesToIndexOptions?: Record<any, any>) => Rollup
-  routes: ({ path, router }: { path: string, router: string }, createFilesToRoutesOptions?: Record<any, any>) => Rollup
   iconComponentIndex: (...args: any[]) => Rollup
   iconComponents: (...args: any[]) => Rollup
 }
@@ -174,21 +168,6 @@ type VirtualMethod = {
 function createVirtualMethod (addVirtual: (options: VirtualOptions) => Rollup): VirtualMethod {
   function virtual (options?: VirtualOptions) {
     return addVirtual(options)
-  }
-
-  function index (path: string, createFilesToIndexOptions: Record<any, any> = {}) {
-    return addVirtual({
-      test: new Testable().idEndsWith(path).test,
-      transform: createFilesToIndex(createFilesToIndexOptions),
-    })
-  }
-
-  // TODO: better types
-  function routes ({ path, router }: { path: string, router: string }, createFilesToRoutesOptions: Record<any, any> = {}) {
-    return addVirtual({
-      test: new Testable().idEndsWith(path).test,
-      transform: createFilesToRoutes(router, createFilesToRoutesOptions),
-    })
   }
 
   function iconComponentIndex ({ icons }: { icons: Icon[] }) {
@@ -208,8 +187,6 @@ function createVirtualMethod (addVirtual: (options: VirtualOptions) => Rollup): 
     })
   }
 
-  virtual.index = index
-  virtual.routes = routes
   virtual.iconComponentIndex = iconComponentIndex
   virtual.iconComponents = iconComponents
   
