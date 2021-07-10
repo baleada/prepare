@@ -2,7 +2,7 @@ import { suite as createSuite } from 'uvu'
 import * as assert from 'uvu/assert'
 import { Tailwindcss as Configureable } from '../../src/configureables/Tailwindcss'
 // @ts-ignore
-import * as baleada from '@baleada/tailwind-theme'
+import { theme as baleada } from '@baleada/tailwind-theme'
 
 const suite = createSuite('configureable.Tailwindcss (node)')
 
@@ -108,7 +108,7 @@ suite(`configures Baleada Theme`, context => {
         expected = {
           theme: baleada,
         }
-
+        
   assert.equal(value, expected)
 })
 

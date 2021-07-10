@@ -18,11 +18,17 @@ import {
 const suite = createSuite('configureable.Rollup')
 
 suite(`configures single input`, () => {
-  const value = new Configureable()
+  const value1 = new Configureable()
           .input('index.ts')
           .configure()
   
-  assert.is(value.input, 'index.ts')
+  assert.is(value1.input, 'index.ts')
+  
+  const value2 = new Configureable()
+          .input({ main: './index.html', nested: './nested/index.html' })
+          .configure()
+  
+  assert.equal(value2.input, { main: './index.html', nested: './nested/index.html' })
 })
 
 suite(`configures multiple inputs`, () => {
@@ -33,22 +39,6 @@ suite(`configures multiple inputs`, () => {
   assert.equal(value.input, ['index.ts'])
   assert.is(value.plugins.length, 1) // Auto-configures multi-entry plugin
 })
-
-suite(`configures aliased inputs`, () => {
-  const value = new Configureable()
-          .input(({ toResolved }) => toResolved({
-            main: './index.html',
-            nested: './nested/index.html'
-          }))
-          .configure()
-  
-  assert.equal(
-    value.input,
-    {
-      main: resolve(__dirname, './index.html'),
-      nested: resolve(__dirname, './nested/index.html'),
-    }
-  )
 
 suite(`configures single output`, () => {
   const value = new Configureable()

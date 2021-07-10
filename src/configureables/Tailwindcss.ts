@@ -1,8 +1,8 @@
 // @ts-ignore
-import baleada from '@baleada/tailwind-theme'
+import { theme as baleada } from '@baleada/tailwind-theme'
 // import baleadaComponents from '@baleada/tailwind-components'
 // @ts-ignore
-import linearNumeric from '@baleada/tailwind-linear-numeric'
+import { linearNumeric } from '@baleada/tailwind-linear-numeric'
 // @ts-ignore
 import * as themeUtils from '@baleada/tailwind-theme-utils'
 import forms from '@tailwindcss/forms'

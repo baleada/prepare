@@ -54,12 +54,9 @@ export class Rollup {
     return this.config
   }
 
-  input (option: InputOption | ((api: InputApi) => InputOption)) {
-    const ensuredOption = typeof option === 'function'
-      ? option({ toResolved })
-      : option
-    this.config.input = ensuredOption
-    return Array.isArray(ensuredOption) ? this.multiEntry() : this
+  input (option: InputOption) {
+    this.config.input = option
+    return Array.isArray(option) ? this.multiEntry() : this
   }
   output (output: OutputOptions | OutputOptions[]) {
     this.config = push<OutputOptions | OutputOptions[]>({ config: this.config, array: 'output', value: output })
@@ -168,21 +165,6 @@ export class Rollup {
       .babel({ target: 'node', format: 'cjs' })
   }
 }
-
-type InputApi = {
-  toResolved: typeof toResolved,
-}
-
-export function toResolved (aliases: { [alias: string]: string }): InputOption {
-  const resolved = {}
-
-  for (const alias in aliases) {
-    resolved[alias] = path.resolve(__dirname, alias)
-  }
-
-  return resolved
-}
-
 
 type VirtualMethod = {
   (options: VirtualOptions): Rollup,
