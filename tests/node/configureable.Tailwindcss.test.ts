@@ -108,7 +108,7 @@ suite(`configures Baleada Theme`, context => {
         expected = {
           theme: baleada,
         }
-        
+
   assert.equal(value, expected)
 })
 

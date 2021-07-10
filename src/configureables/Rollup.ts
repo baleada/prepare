@@ -1,3 +1,4 @@
+import path from 'path'
 import { babel } from '@rollup/plugin-babel'
 import type { RollupBabelInputPluginOptions } from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
@@ -9,6 +10,8 @@ import json from '@rollup/plugin-json'
 import type { RollupJsonOptions as JsonOptions } from '@rollup/plugin-json'
 import typescript from '@rollup/plugin-typescript'
 import type { RollupTypescriptOptions as TypescriptOptions } from '@rollup/plugin-typescript'
+import esbuild from 'rollup-plugin-esbuild'
+import type { Options as EsbuildOptions } from 'rollup-plugin-esbuild'
 import dts from 'rollup-plugin-dts'
 import type { Options as DtsOptions } from 'rollup-plugin-dts'
 import del from 'rollup-plugin-delete'
@@ -25,6 +28,7 @@ import { Testable } from '../Testable'
 import { toIconComponent, toIconComponentIndex } from '../virtual-util'
 import type {
   RollupOptions,
+  InputOption,
   OutputOptions,
   ExternalOption,
   Plugin,
@@ -50,9 +54,12 @@ export class Rollup {
     return this.config
   }
 
-  input (fileOrFiles: string | string[]) {
-    this.config.input = fileOrFiles
-    return typeof fileOrFiles === 'string' ? this : this.multiEntry()
+  input (option: InputOption | ((api: InputApi) => InputOption)) {
+    const ensuredOption = typeof option === 'function'
+      ? option({ toResolved })
+      : option
+    this.config.input = ensuredOption
+    return Array.isArray(ensuredOption) ? this.multiEntry() : this
   }
   output (output: OutputOptions | OutputOptions[]) {
     this.config = push<OutputOptions | OutputOptions[]>({ config: this.config, array: 'output', value: output })
@@ -92,6 +99,9 @@ export class Rollup {
   }
   typescript (options?: TypescriptOptions) {
     return this.plugin(typescript(options))
+  }
+  esbuild (options?: EsbuildOptions) {
+    return this.plugin(esbuild(options))
   }
   dts (options?: DtsOptions) {
     return this.plugin(dts(options))
@@ -158,6 +168,21 @@ export class Rollup {
       .babel({ target: 'node', format: 'cjs' })
   }
 }
+
+type InputApi = {
+  toResolved: typeof toResolved,
+}
+
+export function toResolved (aliases: { [alias: string]: string }): InputOption {
+  const resolved = {}
+
+  for (const alias in aliases) {
+    resolved[alias] = path.resolve(__dirname, alias)
+  }
+
+  return resolved
+}
+
 
 type VirtualMethod = {
   (options: VirtualOptions): Rollup,

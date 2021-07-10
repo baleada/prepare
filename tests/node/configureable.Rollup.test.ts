@@ -1,5 +1,6 @@
 import { suite as createSuite } from 'uvu'
 import * as assert from 'uvu/assert'
+import { resolve } from 'path'
 import { Rollup as Configureable } from '../../src/configureables/Rollup'
 import { 
   babelConfigBrowser,
@@ -32,6 +33,22 @@ suite(`configures multiple inputs`, () => {
   assert.equal(value.input, ['index.ts'])
   assert.is(value.plugins.length, 1) // Auto-configures multi-entry plugin
 })
+
+suite(`configures aliased inputs`, () => {
+  const value = new Configureable()
+          .input(({ toResolved }) => toResolved({
+            main: './index.html',
+            nested: './nested/index.html'
+          }))
+          .configure()
+  
+  assert.equal(
+    value.input,
+    {
+      main: resolve(__dirname, './index.html'),
+      nested: resolve(__dirname, './nested/index.html'),
+    }
+  )
 
 suite(`configures single output`, () => {
   const value = new Configureable()

@@ -2,26 +2,17 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "types": [],
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "declarationDir": "types",
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
-    "node_modules"
+    "**/node_modules"
   ],
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module":  "commonjs"
-    },
-    "include": [
-      "tests/**/*"
-    ]
-  },
 }

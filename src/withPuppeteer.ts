@@ -1,28 +1,35 @@
 import puppeteer from 'puppeteer-core'
-import type { Test } from 'uvu'
+import type { Test, Context as UvuContext } from 'uvu'
 
-type Options = {
+export type Options = {
   launch?: puppeteer.LaunchOptions | ((api: LaunchApi) => puppeteer.LaunchOptions),
-  contextKey?: string,
 }
 
 const defaultOptions: Options = {
   launch: ({ executablePath: { macOS } }) => ({ product: 'chrome', executablePath: macOS }),
-  contextKey: 'puppeteer',
 }
 
-export function withPuppeteer (suite: Test, options = {}) {
-  const { launch: rawLaunch, contextKey } = { ...defaultOptions, ...options },
+export type PuppeteerContext = {
+  puppeteer: {
+    browser: puppeteer.Browser,
+    page: puppeteer.Page,
+    mouseClick: (selector: string) => void,
+    tab: ({ direction, total }: { direction: 'forward' | 'backward', total: number }) => void,
+  }
+}
+
+export function withPuppeteer<Context extends UvuContext> (suite: Test<Context>, options = {}): Test<Context & PuppeteerContext> {
+  const { launch: rawLaunch } = { ...defaultOptions, ...options },
         launch = ensureLaunch(rawLaunch)
 
   suite.before(async context => {
     const browser = await puppeteer.launch(launch),
           page = (await browser.pages())[0],
-          mouseClick = async (selector: string) => {
+          mouseClick: PuppeteerContext['puppeteer']['mouseClick'] = async selector => {
             const coords: DOMRect = await page.evaluate((selector: string) => JSON.parse(JSON.stringify(document.querySelector(selector).getBoundingClientRect())), selector)
             await page.mouse.click(coords.x, coords.y)
           },
-          tab = async ({ direction, total }: { direction: 'forward' | 'backward', total: number }) => {
+          tab: PuppeteerContext['puppeteer']['tab'] = async ({ direction, total }) => {
             switch (direction) {
               case 'forward':
                 for (let i = 0; i < total; i++) {
@@ -39,17 +46,17 @@ export function withPuppeteer (suite: Test, options = {}) {
             }
           }
 
-    context[contextKey] = { browser, page, mouseClick, tab }
+    (context as unknown as Context & PuppeteerContext).puppeteer = { browser, page, mouseClick, tab }
   })
   
   suite.after(async context => {
-    await context[contextKey].browser.close()
+    await context.puppeteer.browser.close()
   })
 
-  return suite
+  return suite as Test<Context & PuppeteerContext>
 }
 
-type LaunchApi = {
+export type LaunchApi = {
   executablePath: {
     macOS: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   }
