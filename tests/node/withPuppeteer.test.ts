@@ -7,19 +7,24 @@ import {
 
 const suite = createSuite('withPuppeteer')
 
-suite('adds before and after hooks', context => {
+suite('adds before, before each, and after hooks', context => {
   const value = withPuppeteer(suiteStub)
 
   assert.ok(value.hasOwnProperty('before'))
+  assert.ok(value.before.hasOwnProperty('each'))
   assert.ok(value.hasOwnProperty('after'))
 })
 
 suite.skip(`launches, runs tests, and closes browser without errors`, async context => {
-  // Not sure how to implement
+  // ?
+})
+
+suite.skip('does not reload between tests unless reloadNext is called', context => {
+  // ?
 })
 
 suite.skip('defaults to testing chrome on macOS', context => {
-  // Not sure how to implement
+  // ?
 })
 
 suite.run()

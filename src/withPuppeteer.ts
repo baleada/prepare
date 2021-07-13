@@ -3,10 +3,12 @@ import type { Test, Context as UvuContext } from 'uvu'
 
 export type Options = {
   launch?: puppeteer.LaunchOptions | ((api: LaunchApi) => puppeteer.LaunchOptions),
+  defaultUrl: string,
 }
 
 const defaultOptions: Options = {
   launch: ({ executablePath: { macOS } }) => ({ product: 'chrome', executablePath: macOS }),
+  defaultUrl: 'http://localhost:3000',
 }
 
 export type PuppeteerContext = {
@@ -15,12 +17,16 @@ export type PuppeteerContext = {
     page: puppeteer.Page,
     mouseClick: (selector: string) => void,
     tab: ({ direction, total }: { direction: 'forward' | 'backward', total: number }) => void,
-  }
+    reloadNext: (url?: string ) => void,
+  },
 }
 
 export function withPuppeteer<Context extends UvuContext> (suite: Test<Context>, options = {}): Test<Context & PuppeteerContext> {
-  const { launch: rawLaunch } = { ...defaultOptions, ...options },
+  const { launch: rawLaunch, defaultUrl } = { ...defaultOptions, ...options },
         launch = ensureLaunch(rawLaunch)
+
+  let shouldReload = true,
+      url = defaultUrl;
 
   suite.before(async context => {
     const browser = await puppeteer.launch(launch),
@@ -44,13 +50,29 @@ export function withPuppeteer<Context extends UvuContext> (suite: Test<Context>,
                 await page.keyboard.up('Shift')
                 break
             }
-          }
+          };
 
-    (context as unknown as Context & PuppeteerContext).puppeteer = { browser, page, mouseClick, tab }
+    (context as unknown as Context & PuppeteerContext).puppeteer = {
+      browser,
+      page,
+      mouseClick,
+      tab,
+      reloadNext: u => {
+        shouldReload = true
+        if (u) url = u
+      },
+    }
+  })
+
+  suite.before.each(async context => {
+    const { puppeteer: { page } } = context as unknown as Context & PuppeteerContext
+    if (shouldReload) await page.goto(url)
+    shouldReload = false
+    url = defaultUrl
   })
   
   suite.after(async context => {
-    await context.puppeteer.browser.close()
+    await (context as unknown as Context & PuppeteerContext).puppeteer.browser.close()
   })
 
   return suite as Test<Context & PuppeteerContext>
