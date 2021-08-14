@@ -43,7 +43,7 @@ export function withPlaywright<UserContext extends Context> (suite: Test<UserCon
   suite.before(async context => {
     const browser = await playwright.launch(launch),
           browserContext = await browser.newContext(),
-          page = (await browserContext.pages())[0],
+          page = await browserContext.newPage(),
           mouseClick: PlaywrightContext['playwright']['mouseClick'] = async selector => {
             const coords: DOMRect = await page.evaluate((selector: string) => JSON.parse(JSON.stringify(document.querySelector(selector).getBoundingClientRect())), selector)
             await page.mouse.click(coords.x, coords.y)
