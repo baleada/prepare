@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer-core'
-import type { Test, Context as UvuContext } from 'uvu'
+import type { Test, Context } from 'uvu'
 
 export type Options = {
   launch?: puppeteer.LaunchOptions | ((api: LaunchApi) => puppeteer.LaunchOptions),
@@ -21,7 +21,7 @@ export type PuppeteerContext = {
   },
 }
 
-export function withPuppeteer<Context extends UvuContext> (suite: Test<Context>, options = {}): Test<Context & PuppeteerContext> {
+export function withPuppeteer<UserContext extends Context> (suite: Test<UserContext>, options = {}): Test<UserContext & PuppeteerContext> {
   const { launch: rawLaunch, defaultUrl } = { ...defaultOptions, ...options },
         launch = ensureLaunch(rawLaunch)
 
@@ -52,7 +52,7 @@ export function withPuppeteer<Context extends UvuContext> (suite: Test<Context>,
             }
           };
 
-    (context as unknown as Context & PuppeteerContext).puppeteer = {
+    (context as unknown as UserContext & PuppeteerContext).puppeteer = {
       browser,
       page,
       mouseClick,
@@ -65,17 +65,17 @@ export function withPuppeteer<Context extends UvuContext> (suite: Test<Context>,
   })
 
   suite.before.each(async context => {
-    const { puppeteer: { page } } = context as unknown as Context & PuppeteerContext
+    const { puppeteer: { page } } = context as unknown as UserContext & PuppeteerContext
     if (shouldReload) await page.goto(url)
     shouldReload = false
     url = defaultUrl
   })
   
   suite.after(async context => {
-    await (context as unknown as Context & PuppeteerContext).puppeteer.browser.close()
+    await (context as unknown as UserContext & PuppeteerContext).puppeteer.browser.close()
   })
 
-  return suite as Test<Context & PuppeteerContext>
+  return suite as Test<UserContext & PuppeteerContext>
 }
 
 export type LaunchApi = {

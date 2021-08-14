@@ -5,7 +5,7 @@ import type {
   BrowserContext,
   Page,
 } from 'playwright-core'
-import type { Test, Context as UvuContext } from 'uvu'
+import type { Test, Context } from 'uvu'
 
 export type Options = {
   launch?: LaunchOptions | ((api: LaunchApi) => LaunchOptions),
@@ -28,7 +28,7 @@ export type PlaywrightContext = {
   },
 }
 
-export function withPlaywright<Context extends UvuContext> (suite: Test<Context>, options = {}): Test<Context & PlaywrightContext> {
+export function withPlaywright<UserContext extends Context> (suite: Test<UserContext>, options = {}): Test<UserContext & PlaywrightContext> {
   const { launch: rawLaunch, defaultUrl } = { ...defaultOptions, ...options },
         launch = ensureLaunch(rawLaunch)
 
@@ -65,7 +65,7 @@ export function withPlaywright<Context extends UvuContext> (suite: Test<Context>
             }
           };
 
-    (context as unknown as Context & PlaywrightContext).playwright = {
+    (context as unknown as UserContext & PlaywrightContext).playwright = {
       browser,
       browserContext,
       page,
@@ -79,17 +79,17 @@ export function withPlaywright<Context extends UvuContext> (suite: Test<Context>
   })
 
   suite.before.each(async context => {
-    const { playwright: { page } } = context as unknown as Context & PlaywrightContext
+    const { playwright: { page } } = context as unknown as UserContext & PlaywrightContext
     if (cache.shouldReload) await page.goto(cache.url)
     cache.shouldReload = false
     cache.url = defaultUrl
   })
   
   suite.after(async context => {
-    await (context as unknown as Context & PlaywrightContext).playwright.browser.close()
+    await (context as unknown as UserContext & PlaywrightContext).playwright.browser.close()
   })
 
-  return suite as Test<Context & PlaywrightContext>
+  return suite as Test<UserContext & PlaywrightContext>
 }
 
 export type LaunchApi = {
