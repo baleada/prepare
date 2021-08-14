@@ -39,6 +39,7 @@
     "esbuild": "^0.12.15",
     "esbuild-register": "^2.6.0",
     "esm": "^3.2.25",
+    "playwright-core": "^1.14.0",
     "postcss": "^8.2.10",
     "purgecss": "^4.0.3",
     "query-string": "^7.0.1",

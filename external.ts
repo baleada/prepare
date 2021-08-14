@@ -28,8 +28,9 @@ export const external = [
   '@vitejs/plugin-vue',
   'vite-plugin-pages',
 
-  // puppeteer
+  // browser controlling
   'puppeteer-core',
+  'playwright-core',
   
   // tailwind
   '@baleada/tailwind-theme',
