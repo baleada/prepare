@@ -7,12 +7,12 @@ import type {
 } from 'playwright-core'
 import type { Test, Context } from 'uvu'
 
-export type Options = {
-  launch?: LaunchOptions | ((api: LaunchApi) => LaunchOptions),
+export type WithPlaywrightOptions = {
+  launch?: LaunchOptions | ((api: WithPlaywrightLaunchApi) => LaunchOptions),
   defaultUrl: string,
 }
 
-const defaultOptions: Options = {
+const defaultOptions: WithPlaywrightOptions = {
   launch: ({ executablePath: { macOS } }) => ({ product: 'chrome', executablePath: macOS }),
   defaultUrl: 'http://localhost:3000',
 }
@@ -92,19 +92,19 @@ export function withPlaywright<UserContext extends Context> (suite: Test<UserCon
   return suite as Test<UserContext & PlaywrightContext>
 }
 
-export type LaunchApi = {
+export type WithPlaywrightLaunchApi = {
   executablePath: {
     macOS: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   }
 }
 
-const launchApi: LaunchApi = {
+const launchApi: WithPlaywrightLaunchApi = {
   executablePath: {
     macOS: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   }
 }
 
-function ensureLaunch (rawLaunch: Options['launch']): LaunchOptions {
+function ensureLaunch (rawLaunch: WithPlaywrightOptions['launch']): LaunchOptions {
   return typeof rawLaunch === 'function'
     ? rawLaunch(launchApi)
     : rawLaunch

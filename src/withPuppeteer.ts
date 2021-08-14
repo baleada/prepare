@@ -1,12 +1,12 @@
 import puppeteer from 'puppeteer-core'
 import type { Test, Context } from 'uvu'
 
-export type Options = {
-  launch?: puppeteer.LaunchOptions | ((api: LaunchApi) => puppeteer.LaunchOptions),
+export type WithPuppeteerOptions = {
+  launch?: puppeteer.LaunchOptions | ((api: WithPuppeteerLaunchApi) => puppeteer.LaunchOptions),
   defaultUrl: string,
 }
 
-const defaultOptions: Options = {
+const defaultOptions: WithPuppeteerOptions = {
   launch: ({ executablePath: { macOS } }) => ({ product: 'chrome', executablePath: macOS }),
   defaultUrl: 'http://localhost:3000',
 }
@@ -78,19 +78,19 @@ export function withPuppeteer<UserContext extends Context> (suite: Test<UserCont
   return suite as Test<UserContext & PuppeteerContext>
 }
 
-export type LaunchApi = {
+export type WithPuppeteerLaunchApi = {
   executablePath: {
     macOS: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   }
 }
 
-const launchApi: LaunchApi = {
+const launchApi: WithPuppeteerLaunchApi = {
   executablePath: {
     macOS: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   }
 }
 
-function ensureLaunch (rawLaunch: Options['launch']): puppeteer.LaunchOptions {
+function ensureLaunch (rawLaunch: WithPuppeteerOptions['launch']): puppeteer.LaunchOptions {
   return typeof rawLaunch === 'function'
     ? rawLaunch(launchApi)
     : rawLaunch
