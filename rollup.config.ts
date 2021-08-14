@@ -8,6 +8,7 @@ const shared = new configureable.Rollup()
           'src/empty.ts',
           'src/Testable.ts',
           'src/withPuppeteer.ts',
+          'src/withPlaywright.ts',
           'src/virtual-util.ts',
         ])
         .external(external)
