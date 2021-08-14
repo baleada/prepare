@@ -29,6 +29,7 @@ const shared = new configureable.Rollup()
           'types/empty.d.ts',
           'types/Testable.d.ts',
           'types/withPuppeteer.d.ts',
+          'types/withPlaywright.d.ts',
           'types/virtual.d-util.ts',
         ])
         .external(external)
