@@ -42,6 +42,8 @@ export const external = [
   '@tailwindcss/aspect-ratio',
 
   // postcss
+  'postcss',
+  'purgecss',
   'postcss-import',
   'postcss-nested',
   /tailwindcss(\/|$)/,
@@ -58,4 +60,5 @@ export const external = [
   '@rollup/pluginutils',
   'path',
   'fs',
+  'query-string',
 ]
