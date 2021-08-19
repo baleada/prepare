@@ -9,7 +9,7 @@ import type { Test, Context } from 'uvu'
 
 export type WithPlaywrightOptions = {
   launch?: LaunchOptions | ((api: WithPlaywrightLaunchApi) => LaunchOptions),
-  defaultUrl: string,
+  defaultUrl?: string,
 }
 
 const defaultOptions: WithPlaywrightOptions = {
@@ -28,7 +28,7 @@ export type PlaywrightContext = {
   },
 }
 
-export function withPlaywright<UserContext extends Context> (suite: Test<UserContext>, options = {}): Test<UserContext & PlaywrightContext> {
+export function withPlaywright<UserContext extends Context> (suite: Test<UserContext>, options: WithPlaywrightOptions = {}): Test<UserContext & PlaywrightContext> {
   const { launch: rawLaunch, defaultUrl } = { ...defaultOptions, ...options },
         launch = ensureLaunch(rawLaunch)
 

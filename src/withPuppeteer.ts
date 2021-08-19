@@ -3,7 +3,7 @@ import type { Test, Context } from 'uvu'
 
 export type WithPuppeteerOptions = {
   launch?: puppeteer.LaunchOptions | ((api: WithPuppeteerLaunchApi) => puppeteer.LaunchOptions),
-  defaultUrl: string,
+  defaultUrl?: string,
 }
 
 const defaultOptions: WithPuppeteerOptions = {
@@ -21,7 +21,7 @@ export type PuppeteerContext = {
   },
 }
 
-export function withPuppeteer<UserContext extends Context> (suite: Test<UserContext>, options = {}): Test<UserContext & PuppeteerContext> {
+export function withPuppeteer<UserContext extends Context> (suite: Test<UserContext>, options: WithPuppeteerOptions = {}): Test<UserContext & PuppeteerContext> {
   const { launch: rawLaunch, defaultUrl } = { ...defaultOptions, ...options },
         launch = ensureLaunch(rawLaunch)
 
