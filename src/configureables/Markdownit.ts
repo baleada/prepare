@@ -1,10 +1,9 @@
 import MarkdownIt from 'markdown-it'
-// @ts-ignore
-import proseContainer from '@baleada/markdown-it-prose-container'
-// @ts-ignore
-import spaLinks from '@baleada/markdown-it-spa-links'
-// @ts-ignore
-import textContent from '@baleada/markdown-it-text-content'
+import { createMarkdownItProseContainer } from '@baleada/markdown-it-prose-container'
+import type { Options as MarkdownItProseContainerOptions } from '@baleada/markdown-it-prose-container'
+import { createMarkdownItSpaLinks } from '@baleada/markdown-it-spa-links'
+import type { Options as MarkdownItSpaLinksOptions } from '@baleada/markdown-it-spa-links'
+import { createMarkdownItTextContent } from '@baleada/markdown-it-text-content'
 import linkAttributes from 'markdown-it-link-attributes'
 import refractor from 'refractor'
 import rehype from 'rehype'
@@ -47,16 +46,16 @@ export class Markdownit {
     return this
   }
 
-  proseContainer (options?: any) {
-    return this.plugin(proseContainer, options)
+  proseContainer (options?: MarkdownItProseContainerOptions) {
+    return this.plugin(createMarkdownItProseContainer(options))
   }
 
-  spaLinks (options?: any) {
-    return this.plugin(spaLinks, options)
+  spaLinks (options?: MarkdownItSpaLinksOptions) {
+    return this.plugin(createMarkdownItSpaLinks(options))
   }
 
-  textContent (options?: any) {
-    return this.plugin(textContent, options)
+  textContent () {
+    return this.plugin(createMarkdownItTextContent())
   }
 
   linkAttributes (options?: linkAttributes.Config) {
