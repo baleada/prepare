@@ -7,6 +7,7 @@
 import multiEntry from '@rollup/plugin-multi-entry'
 import resolve from '@rollup/plugin-node-resolve'
 import del from 'rollup-plugin-delete'
+import json from '@rollup/plugin-json'
 import analyzer from 'rollup-plugin-analyzer'
 import babel from '@rollup/plugin-babel'
 import esbuild from 'rollup-plugin-esbuild'
@@ -29,6 +30,7 @@ const esm = {
     del({ targets: 'lib/*', verbose: true }),
     multiEntry(),
     commonjs(),
+    json(),
     esbuild(),
     resolve(),
     babel({

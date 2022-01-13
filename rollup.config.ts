@@ -1,4 +1,4 @@
-import { configureable } from './lib/index.js'
+import { configureable } from './src/configureable'
 import { external } from './external'
 
 const shared = new configureable.Rollup()
@@ -13,6 +13,7 @@ const shared = new configureable.Rollup()
         ])
         .external(external)
         .typescript()
+        .json()
         .resolve(),
       esm = shared
         // .delete({ targets: 'lib/*', verbose: true })

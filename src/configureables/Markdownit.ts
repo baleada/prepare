@@ -5,8 +5,8 @@ import { createMarkdownItSpaLinks } from '@baleada/markdown-it-spa-links'
 import type { Options as MarkdownItSpaLinksOptions } from '@baleada/markdown-it-spa-links'
 import { createMarkdownItTextContent } from '@baleada/markdown-it-text-content'
 import linkAttributes from 'markdown-it-link-attributes'
-import refractor from 'refractor'
-import rehype from 'rehype'
+import { refractor } from 'refractor'
+import { rehype } from 'rehype'
 
 export class Markdownit {
   constructor (private config: MarkdownIt.Options & { plugins?: ([MarkdownIt.PluginWithOptions, any])[] } = { plugins: [] }) {}
@@ -66,10 +66,10 @@ export class Markdownit {
 const highlightsByName: Record<'refractorRehype' | 'refractorRehypeWithEscapedVueMustache', (str: string, lang: string, attrs: string) => string> = {
   refractorRehype (code, lang) {
     try {
-      const children = refractor.highlight(code, lang)
-      
+      const tree = refractor.highlight(code, lang)
+
       return rehype()
-        .stringify({ type: 'root', children })
+        .stringify(tree as Parameters<ReturnType<typeof rehype>['stringify']>[0])
         .toString()
     } catch (error) {
       return ''
@@ -77,10 +77,10 @@ const highlightsByName: Record<'refractorRehype' | 'refractorRehypeWithEscapedVu
   },
   refractorRehypeWithEscapedVueMustache (code, lang) {
     try {
-      const children = refractor.highlight(code, lang)
+      const tree = refractor.highlight(code, lang)
       
       return rehype()
-        .stringify({ type: 'root', children })
+        .stringify(tree as Parameters<ReturnType<typeof rehype>['stringify']>[0])
         .toString()
         .replace(/({{)/g, '<span>{</span><span>{</span>')
         .replace(/(}})/g, '<span>}</span><span>}</span>')

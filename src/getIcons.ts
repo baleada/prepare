@@ -1,7 +1,6 @@
 import { readdirSync, readFileSync } from 'fs'
 import { resolve, parse } from 'path'
 import { parseFragment, serialize } from 'parse5'
-import type { DefaultTreeParentNode, DefaultTreeElement } from 'parse5'
 import type { Test } from './Testable'
 
 export type Icon = {
@@ -29,11 +28,11 @@ export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) =>
             contents: readFileSync(`./${basePath}/${dir}/${file}`, 'utf8'),
           })),
           fromDir = fileMetadata.map(({ snakeCased, contents }) => {
-            const { childNodes: { 0: svg } } = parseFragment(contents) as DefaultTreeParentNode
+            const { childNodes: { 0: svg } } = parseFragment(contents)
             return {
               componentName: `${set}${toComponentName(snakeCased)}`,
               contents: serialize(svg),
-              viewBox: (svg as DefaultTreeElement).attrs.find(({ name }) => name.toLowerCase() === 'viewbox')?.value,
+              viewBox: (svg as any).attrs.find(({ name }) => name.toLowerCase() === 'viewbox')?.value,
             }
           })
     
