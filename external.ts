@@ -26,6 +26,7 @@ export const external = [
   
   // vite
   '@vitejs/plugin-vue',
+  '@vitejs/plugin-react',
   'vite-plugin-pages',
 
   // browser controlling
@@ -33,7 +34,6 @@ export const external = [
   'playwright-core',
   
   // tailwind
-  '@baleada/tailwind-theme',
   '@baleada/tailwind-theme-utils',
   '@baleada/tailwind-linear-numeric',
   '@tailwindcss/forms',
