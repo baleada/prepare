@@ -2,6 +2,8 @@ import { resolve } from 'path'
 import { Rollup } from './Rollup'
 import vue from '@vitejs/plugin-vue'
 import type { Options as VueOptions } from '@vitejs/plugin-vue'
+import react from '@vitejs/plugin-react'
+import type { Options as ReactOptions } from '@vitejs/plugin-react'
 import pages from 'vite-plugin-pages'
 import type { UserOptions as PagesOptions } from 'vite-plugin-pages'
 import type { RollupNodeResolveOptions as ResolveOptions } from '@rollup/plugin-node-resolve'
@@ -65,7 +67,7 @@ export class Vite {
     return this
   }
 
-  plugin (plugin: PluginOption) {
+  plugin (plugin: PluginOption | PluginOption[]) {
     this.config.plugins = [
       ...(this.config.plugins || []),
       plugin
@@ -76,6 +78,10 @@ export class Vite {
 
   vue (options?: VueOptions) {
     return this.plugin(vue(options))
+  }
+  
+  react (options?: ReactOptions) {
+    return this.plugin(react(options))
   }
   
   pages (options?: PagesOptions) {

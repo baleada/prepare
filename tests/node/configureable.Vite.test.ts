@@ -95,6 +95,14 @@ suite(`configures vue`, context => {
   assert.is(value.plugins.length, 1)
 })
 
+suite(`configures react`, context => {
+  const value = new Configureable()
+          .react()
+          .configure()
+
+  assert.is(value.plugins.length, 1)
+})
+
 suite(`configures pages`, context => {
   const value = new Configureable()
           .pages()
