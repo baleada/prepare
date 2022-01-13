@@ -10,7 +10,6 @@ import colors from 'tailwindcss/colors'
 import createPlugin, { TailwindPlugin } from 'tailwindcss/plugin'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import { TailwindConfig } from 'tailwindcss/tailwind-config'
-// import type { PurgeCSS } from 'purgecss'
 
 export class Tailwindcss {
   private config: Partial<TailwindConfig>
