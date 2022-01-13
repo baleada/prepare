@@ -16,7 +16,7 @@ const shared = new configureable.Rollup()
         .json()
         .resolve(),
       esm = shared
-        // .delete({ targets: 'lib/*', verbose: true })
+        .delete({ targets: 'lib/*', verbose: true })
         .esm({ file: 'lib/index.js', target: 'node' })
         .analyzer()
         .configure(),

@@ -11,7 +11,7 @@
   },
   "scripts": {
     "prepare:standard": "tsc && rollup --config rollup.standard.config.ts --configPlugin typescript",
-    "prepare": "tsc && rollup --config rollup.config.ts --configPlugin typescript",
+    "prepare": "tsc && node -r esbuild-register scripts/prepare.ts",
     "prepare:reset": "npm run prepare:standard && npm run prepare",
     "test:only": "run() { uvu -r esbuild-register tests/$2 $1.test.ts$; }; run",
     "test": "npm run test:only .",
