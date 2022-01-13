@@ -1,74 +1,21 @@
-// @ts-ignore
-import { theme as baleada } from '@baleada/tailwind-theme'
 // import baleadaComponents from '@baleada/tailwind-components'
-// @ts-ignore
-import { linearNumeric } from '@baleada/tailwind-linear-numeric'
-// @ts-ignore
+import { getLinearNumeric } from '@baleada/tailwind-linear-numeric'
 import * as themeUtils from '@baleada/tailwind-theme-utils'
 import forms from '@tailwindcss/forms'
 import typography from '@tailwindcss/typography'
 import lineClamp from '@tailwindcss/line-clamp'
 import aspectRatio from '@tailwindcss/aspect-ratio'
-import defaultConfig from 'tailwindcss/defaultConfig.js'
-import colors from 'tailwindcss/colors.js'
-import createPlugin from 'tailwindcss/plugin.js'
-import resolveConfig from 'tailwindcss/resolveConfig.js'
-import { TailwindConfig, TailwindFontConfig } from 'tailwindcss/tailwind-config'
+import defaultConfig from 'tailwindcss/defaultConfig'
+import colors from 'tailwindcss/colors'
+import createPlugin, { TailwindPlugin } from 'tailwindcss/plugin'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import { TailwindConfig } from 'tailwindcss/tailwind-config'
 // import type { PurgeCSS } from 'purgecss'
 
-type Config = {
-  mode?: 'jit',
-  purge?:
-    string[]
-    // | 
-    // {
-    //   mode?: 'all',
-    //   enabled?: boolean,
-    //   preserveHtmlElements?: boolean,
-    //   layers?: ('base' | 'components' | 'utilities')[],
-    //   content?: string[],
-    //   options?: PurgeCSS['options'],
-    // },
-  theme?: Record<string, TailwindThemePluginConfig | TailwindTheme>,
-  variants?: {
-    [plugin: string]: string[],
-  }
-  plugins?: TailwindPlugin[],
-  important?: true
-}
-
-type TailwindTheme = { [plugin: string]: TailwindThemePluginConfig }
-type TailwindThemePluginConfig = Record<string | number, TailwindThemeValue | TailwindThemeClosure>
-type TailwindThemeClosure = (api: any) => TailwindThemeValue
-type TailwindThemeValue = 
-  string // Most plugins
-  | TailwindFontConfig // custom lineheight
-  | string[] // Font family
-  | { [hue: string]: Record<string | number, string> } // Colors
-
-
-type TailwindPlugin = TailwindPluginWithOptions | TailwindPluginWithoutOptions // TODO: Improve
-type TailwindPluginWithOptions = Function
-type TailwindPluginWithoutOptions = { handler: any, config: any }
-type TailwindCustomPlugin = (api: CreatePluginApi) => TailwindPlugin
-type CreatePluginApi = {
-  postcss: Function,
-  config: Function,
-  theme: Function,
-  corePlugins: Function,
-  variants: Function,
-  e: Function,
-  prefix: Function,
-  addUtilities: Function,
-  addComponents: Function,
-  addBase: Function,
-  addVariant: Function,
-}
-
 export class Tailwindcss {
-  private config: Config
+  private config: Partial<TailwindConfig>
   plugin: PluginMethod
-  constructor (config: Config = {}) {
+  constructor (config: Partial<TailwindConfig> = {}) {
     this.config = config
     this.plugin = createPluginMethod(this.addPlugin.bind(this))
   }
@@ -86,26 +33,21 @@ export class Tailwindcss {
     return this.config
   }
 
-  jit () {
-    this.config.mode = 'jit'
-    return this
-  }
-
   important () {
     this.config.important = true
     return this
   }
 
-  purge (paths: string[]) {
-    this.config.purge = [
-      ...(this.config.purge ?? []),
+  content (paths: string[]) {
+    this.config.content = [
+      ...((this.config.content as string[]) ?? []),
       ...paths,
     ]
     return this
   }
 
-  theme (themeOrConfigureTheme: TailwindTheme | ((api: ConfigureThemeApi) => TailwindTheme)) {
-    const ensuredTheme = ensureTheme({ themeRaw: themeOrConfigureTheme, currentConfig: this.config })
+  theme (themeOrGetTheme: TailwindConfig['theme'] | ((api: GetThemeApi) => TailwindConfig['theme'])) {
+    const ensuredTheme = ensureTheme({ themeRaw: themeOrGetTheme, currentConfig: this.config })
 
     this.config.theme = {
       ...(this.config.theme ?? {}),
@@ -115,18 +57,14 @@ export class Tailwindcss {
     return this
   }
 
-  baleada () {
-    return this.theme(baleada)
-  }
-
-  extend (extendOrConfigureExtend: TailwindTheme | ((api: ConfigureThemeApi) => TailwindTheme)) {
-    const ensuredExtend = ensureTheme({ themeRaw: extendOrConfigureExtend, currentConfig: this.config })
+  extend (extendOrGetExtend: TailwindConfig['theme']['extend'] | ((api: GetThemeApi) => TailwindConfig['theme']['extend'])) {
+    const ensuredExtend = ensureTheme({ themeRaw: extendOrGetExtend, currentConfig: this.config })
     
     return this.theme({
       extend: {
-        ...((this.config.theme?.extend as TailwindTheme) ?? {}),
+        ...((this.config.theme?.extend) ?? {}),
         ...ensuredExtend,
-      } as unknown as TailwindThemePluginConfig
+      }
     })
   }
 
@@ -150,26 +88,25 @@ export class Tailwindcss {
   // }
 }
 
-type ConfigureThemeApi = {
+type GetThemeApi = {
   defaultConfig: TailwindConfig,
-  currentConfig: Config,
+  currentConfig: Partial<TailwindConfig>,
   colors: typeof colors,
   resolveConfig: typeof resolveConfig,
-  themeUtils: any,
-  linearNumeric: any,
-  baleada: any,
+  themeUtils: typeof themeUtils,
+  getLinearNumeric: typeof getLinearNumeric,
 }
 
-function ensureTheme ({ themeRaw, currentConfig }: { themeRaw: TailwindTheme | ((api: ConfigureThemeApi) => TailwindTheme), currentConfig: Config }): TailwindTheme {
+function ensureTheme ({ themeRaw, currentConfig }: { themeRaw: TailwindConfig['theme'] | ((api: GetThemeApi) => TailwindConfig['theme']), currentConfig: Partial<TailwindConfig> }): TailwindConfig['theme'] {
   return typeof themeRaw === 'function'
-    ? themeRaw({ defaultConfig, currentConfig, colors, resolveConfig, themeUtils, linearNumeric, baleada })
+    ? themeRaw({ defaultConfig, currentConfig, colors, resolveConfig, themeUtils, getLinearNumeric })
     : themeRaw
 }
 
 
 type PluginMethod = {
   (plugin: TailwindPlugin): Tailwindcss,
-  custom: (plugin: TailwindCustomPlugin) => Tailwindcss
+  custom: (plugin: Parameters<typeof createPlugin>[0]) => Tailwindcss
 }
 
 function createPluginMethod (addPlugin: (plugin: TailwindPlugin) => Tailwindcss): PluginMethod {
@@ -177,7 +114,7 @@ function createPluginMethod (addPlugin: (plugin: TailwindPlugin) => Tailwindcss)
     return addPlugin(plugin)
   }
 
-  function custom (customPlugin: TailwindCustomPlugin) {
+  function custom (customPlugin: Parameters<typeof createPlugin>[0]) {
     return addPlugin(createPlugin(customPlugin))
   }
 

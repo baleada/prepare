@@ -1,23 +1,10 @@
 import { suite as createSuite } from 'uvu'
 import * as assert from 'uvu/assert'
 import { Tailwindcss as Configureable } from '../../src/configureables/Tailwindcss'
-// @ts-ignore
-import { theme as baleada } from '@baleada/tailwind-theme'
 
 const suite = createSuite('configureable.Tailwindcss (node)')
 
-suite(`configures JIT mode`, context => {
-  const value = new Configureable()
-          .jit()
-          .configure(),
-        expected = {
-          mode: 'jit'
-        }
-  
-  assert.equal(value, expected)
-})
-
-suite(`configures important`, context => {
+suite(`configures important`, () => {
   const value = new Configureable()
           .important()
           .configure(),
@@ -28,12 +15,12 @@ suite(`configures important`, context => {
   assert.equal(value, expected)
 })
 
-suite(`configures purge paths`, context => {
+suite(`configures content paths`, () => {
   const value = new Configureable()
-          .purge(['index.html'])
+          .content(['index.html'])
           .configure(),
         expected = {
-          purge: [
+          content: [
             'index.html'
           ]
         }
@@ -41,42 +28,42 @@ suite(`configures purge paths`, context => {
   assert.equal(value, expected)
 })
 
-suite(`configures theme`, context => {
+suite(`configures theme`, () => {
   const value = new Configureable()
-          .theme({ stub: { 'stub': 'stub' } })
+          .theme({ spacing: { 'stub': 'stub' } })
           .configure(),
         expected = {
           theme: {
-            stub: { 'stub': 'stub' }
+            spacing: { 'stub': 'stub' }
           }
         }
         
   assert.equal(value, expected)
 })
 
-suite(`configures theme via configureTheme callback`, context => {
+suite(`configures theme via configureTheme callback`, () => {
   const value = new Configureable()
-          .theme(({ baleada }) => ({ screens: baleada.screens }))
+          .theme(() => ({ screens: { all: '0' } }))
           .configure(),
         expected = {
           theme: {
-            screens: baleada.screens,
+            screens: { all: '0' },
           }
         }
         
   assert.equal(value, expected)
 })
 
-suite(`extends theme`, context => {
+suite(`extends theme`, () => {
   const value = new Configureable()
-          .theme(({ baleada }) => ({ screens: baleada.screens }))
-          .extend({ stub: { stub: 'stub' } })
+          .theme(() => ({ screens: { all: '0' } }))
+          .extend({ spacing: { stub: 'stub' } })
           .configure(),
         expected = {
           theme: {
-            screens: baleada.screens,
+            screens: { all: '0' },
             extend: {
-              stub: { 'stub': 'stub' }
+              spacing: { 'stub': 'stub' }
             }
           }
         }
@@ -84,16 +71,16 @@ suite(`extends theme`, context => {
   assert.equal(value, expected)
 })
 
-suite(`extends theme via callback`, context => {
+suite(`extends theme via callback`, () => {
   const value = new Configureable()
-          .theme(({ baleada }) => ({ screens: baleada.screens }))
-          .extend(({ baleada }) => ({ screens: baleada.screens }))
+          .theme(() => ({ screens: { all: '0' } }))
+          .extend(() => ({ spacing: { stub: 'stub' } }))
           .configure(),
         expected = {
           theme: {
-            screens: baleada.screens,
+            screens: { all: '0' },
             extend: {
-              screens: baleada.screens,
+              spacing: { 'stub': 'stub' }
             }
           }
         }
@@ -101,87 +88,16 @@ suite(`extends theme via callback`, context => {
   assert.equal(value, expected)
 })
 
-suite(`configures Baleada Theme`, context => {
-  const value = new Configureable()
-          .baleada()
-          .configure(),
-        expected = {
-          theme: baleada,
-        }
-        
-  assert.equal(value, expected)
-})
-
-// suite(`configures variants`, context => {
-//   const value = new Configureable()
-//           .variants({ stub: ['stub'] })
-//           .configure(),
-//         expected = {
-//           variants: {
-//             stub: ['stub']
-//           }
-//         }
-        
-//   assert.equal(value, expected)
-// })
-
-// suite(`configures variants via callback`, context => {
-//   const value = new Configureable()
-//           .variants(({ defaultConfig }) => ({ screens: defaultConfig.variants.screens }))
-//           .configure(),
-//         expected = {
-//           variants: {
-//             screens: defaultConfig.variants.screens,
-//           }
-//         }
-        
-//   assert.equal(value, expected)
-// })
-
-// suite(`extends variants`, context => {
-//   const value = new Configureable()
-//           .variants(({ defaultConfig }) => ({ screens: defaultConfig.variants.screens }))
-//           .variants.extend({ screens: defaultConfig.variants.screens })
-//           .configure(),
-//         expected = {
-//           variants: {
-//             screens: defaultConfig.variants.screens,
-//             extend: {
-//               screens: defaultConfig.variants.screens
-//             }
-//           }
-//         }
-        
-//   assert.equal(value, expected)
-// })
-
-// suite(`extends variants via callback`, context => {
-//   const value = new Configureable()
-//           .variants(({ defaultConfig }) => ({ screens: defaultConfig.variants.screens }))
-//           .variants.extend(({ defaultConfig }) => ({ screens: defaultConfig.variants.screens }))
-//           .configure(),
-//         expected = {
-//           variants: {
-//             screens: defaultConfig.variants.screens,
-//             extend: {
-//               screens: defaultConfig.variants.screens,
-//             }
-//           }
-//         }
-        
-//   assert.equal(value, expected)
-// })
-
-suite(`configures plugins`, context => {
+suite(`configures plugins`, () => {
   const pluginStub = () => {}
   const value = new Configureable()
-          .plugin(pluginStub)
+          .plugin(pluginStub as any)
           .configure()
 
   assert.is(value.plugins.length, 1)
 })
 
-suite(`configures custom plugins`, context => {
+suite(`configures custom plugins`, () => {
   const pluginStub = () => {}
   const value = new Configureable()
           .plugin.custom(() => pluginStub)
@@ -190,7 +106,7 @@ suite(`configures custom plugins`, context => {
   assert.is(value.plugins.length, 1)
 })
 
-suite(`configures forms plugin`, context => {
+suite(`configures forms plugin`, () => {
   const value = new Configureable()
           .forms()
           .configure()
@@ -198,7 +114,7 @@ suite(`configures forms plugin`, context => {
   assert.is(value.plugins.length, 1)
 })
 
-suite(`configures typography plugin`, context => {
+suite(`configures typography plugin`, () => {
   const value = new Configureable()
           .typography()
           .configure()
@@ -206,7 +122,7 @@ suite(`configures typography plugin`, context => {
   assert.is(value.plugins.length, 1)
 })
 
-suite(`configures lineClamp plugin`, context => {
+suite(`configures lineClamp plugin`, () => {
   const value = new Configureable()
           .lineClamp()
           .configure()
@@ -214,23 +130,12 @@ suite(`configures lineClamp plugin`, context => {
   assert.is(value.plugins.length, 1)
 })
 
-suite(`configures aspectRatio plugin`, context => {
+suite(`configures aspectRatio plugin`, () => {
   const value = new Configureable()
           .aspectRatio()
           .configure()
 
   assert.is(value.plugins.length, 1)
 })
-
-// suite(`configures presets`, context => {
-//   const value = new Configureable()
-//           .preset('stub')
-//           .configure(),
-//         expected = {
-//           presets: ['stub'],
-//         }
-
-//   assert.equal(value, expected)
-// })
 
 suite.run()
