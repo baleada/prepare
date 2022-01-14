@@ -28,7 +28,7 @@ export default function getIcons ({ dirs, basePath, toSnakeCased = ({ name }) =>
             contents: readFileSync(`./${basePath}/${dir}/${file}`, 'utf8'),
           })),
           fromDir = fileMetadata.map(({ snakeCased, contents }) => {
-            const { childNodes: { 0: svg } } = parseFragment(contents)
+            const { childNodes: { 0: svg } } = parseFragment(contents) as any
             return {
               componentName: `${set}${toComponentName(snakeCased)}`,
               contents: serialize(svg),
