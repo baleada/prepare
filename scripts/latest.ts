@@ -1,11 +1,20 @@
 import { readFileSync } from 'fs'
 import { execSync } from 'child_process'
 
+const blocklist = [
+  'refractor',
+  'rehype',
+]
+
+const notBlocked = (name: string) => !blocklist.includes(name)
+
 const pkg = JSON.parse(readFileSync('package.json', 'utf8'))
 
 const deps = Object.keys(pkg.dependencies || {})
+  .filter(notBlocked)
 
 const devDeps = Object.keys(pkg.devDependencies || {})
+  .filter(notBlocked)
 
 const withLogging = (command: string) => {
   execSync(command, (error, stdout, stderr) => {
