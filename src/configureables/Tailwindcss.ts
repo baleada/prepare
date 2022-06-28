@@ -7,19 +7,19 @@ import lineClamp from '@tailwindcss/line-clamp'
 import aspectRatio from '@tailwindcss/aspect-ratio'
 import defaultConfig from 'tailwindcss/defaultConfig'
 import colors from 'tailwindcss/colors'
-import createPlugin, { TailwindPlugin } from 'tailwindcss/plugin'
+import createPlugin from 'tailwindcss/plugin'
+import type { Config } from 'tailwindcss/types/config'
 import resolveConfig from 'tailwindcss/resolveConfig'
-import { TailwindConfig } from 'tailwindcss/tailwind-config'
 
 export class Tailwindcss {
-  private config: Partial<TailwindConfig>
+  private config: Partial<Config>
   plugin: PluginMethod
-  constructor (config: Partial<TailwindConfig> = {}) {
+  constructor (config: Partial<Config> = {}) {
     this.config = config
     this.plugin = createPluginMethod(this.addPlugin.bind(this))
   }
 
-  private addPlugin (plugin: TailwindPlugin) {
+  private addPlugin (plugin: ReturnType<typeof createPlugin>) {
     this.config.plugins = [
       ...(this.config.plugins ?? []),
       plugin
@@ -45,7 +45,7 @@ export class Tailwindcss {
     return this
   }
 
-  theme (themeOrGetTheme: TailwindConfig['theme'] | ((api: GetThemeApi) => TailwindConfig['theme'])) {
+  theme (themeOrGetTheme: Config['theme'] | ((api: GetThemeApi) => Config['theme'])) {
     const ensuredTheme = ensureTheme({ themeRaw: themeOrGetTheme, currentConfig: this.config })
 
     this.config.theme = {
@@ -56,7 +56,7 @@ export class Tailwindcss {
     return this
   }
 
-  extend (extendOrGetExtend: TailwindConfig['theme']['extend'] | ((api: GetThemeApi) => TailwindConfig['theme']['extend'])) {
+  extend (extendOrGetExtend: Config['theme']['extend'] | ((api: GetThemeApi) => Config['theme']['extend'])) {
     const ensuredExtend = ensureTheme({ themeRaw: extendOrGetExtend, currentConfig: this.config })
     
     return this.theme({
@@ -68,7 +68,7 @@ export class Tailwindcss {
   }
 
   forms () {
-    return this.plugin(forms)
+    return this.plugin(forms as unknown as ReturnType<typeof createPlugin>)
   }
 
   typography () {
@@ -88,15 +88,15 @@ export class Tailwindcss {
 }
 
 type GetThemeApi = {
-  defaultConfig: TailwindConfig,
-  currentConfig: Partial<TailwindConfig>,
+  defaultConfig: Config,
+  currentConfig: Partial<Config>,
   colors: typeof colors,
   resolveConfig: typeof resolveConfig,
   themeUtils: typeof themeUtils,
   getLinearNumeric: typeof getLinearNumeric,
 }
 
-function ensureTheme ({ themeRaw, currentConfig }: { themeRaw: TailwindConfig['theme'] | ((api: GetThemeApi) => TailwindConfig['theme']), currentConfig: Partial<TailwindConfig> }): TailwindConfig['theme'] {
+function ensureTheme ({ themeRaw, currentConfig }: { themeRaw: Config['theme'] | ((api: GetThemeApi) => Config['theme']), currentConfig: Partial<Config> }): Config['theme'] {
   return typeof themeRaw === 'function'
     ? themeRaw({ defaultConfig, currentConfig, colors, resolveConfig, themeUtils, getLinearNumeric })
     : themeRaw
@@ -104,12 +104,12 @@ function ensureTheme ({ themeRaw, currentConfig }: { themeRaw: TailwindConfig['t
 
 
 type PluginMethod = {
-  (plugin: TailwindPlugin): Tailwindcss,
+  (plugin: ReturnType<typeof createPlugin>): Tailwindcss,
   custom: (plugin: Parameters<typeof createPlugin>[0]) => Tailwindcss
 }
 
-function createPluginMethod (addPlugin: (plugin: TailwindPlugin) => Tailwindcss): PluginMethod {
-  function plugin (plugin: TailwindPlugin) {
+function createPluginMethod (addPlugin: (plugin: ReturnType<typeof createPlugin>) => Tailwindcss): PluginMethod {
+  function plugin (plugin: ReturnType<typeof createPlugin>) {
     return addPlugin(plugin)
   }
 
