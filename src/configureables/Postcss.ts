@@ -1,5 +1,5 @@
 import atImport from 'postcss-import'
-import nested from 'postcss-nested'
+import nesting from 'tailwindcss/nesting'
 // import presetEnv from 'postcss-preset-env'
 import tailwindcss from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
@@ -23,8 +23,8 @@ export class Postcss {
     return this.plugin(atImport)
   }
 
-  nested () {
-    return this.plugin(nested)
+  nesting () {
+    return this.plugin(nesting)
   }
 
   tailwindcss () {

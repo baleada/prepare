@@ -21,9 +21,9 @@ suite(`configures import plugin`, context => {
   assert.is(value.plugins.length, 1)
 })
 
-suite(`configures nested plugin`, context => {
+suite(`configures nesting plugin`, context => {
   const value = new Configureable()
-          .nested()
+          .nesting()
           .configure()
   
   assert.is(value.plugins.length, 1)
