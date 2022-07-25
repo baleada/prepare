@@ -5,6 +5,7 @@ import type { Options as VueOptions } from '@vitejs/plugin-vue'
 import react from '@vitejs/plugin-react'
 import type { Options as ReactOptions } from '@vitejs/plugin-react'
 import pages from 'vite-plugin-pages'
+import inspect, { Options as InspectOptions } from 'vite-plugin-inspect'
 import type { UserOptions as PagesOptions } from 'vite-plugin-pages'
 import type { RollupNodeResolveOptions as ResolveOptions } from '@rollup/plugin-node-resolve'
 import type { Options as VirtualOptions } from '@baleada/rollup-plugin-virtual'
@@ -86,6 +87,10 @@ export class Vite {
   
   pages (options?: PagesOptions) {
     return this.plugin(pages(options))
+  }
+
+  inspect (options?: InspectOptions) {
+    return this.plugin(inspect(options))
   }
 
   resolve (options?: ResolveOptions) {
