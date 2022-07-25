@@ -14,7 +14,7 @@ export type WithPlaywrightOptions = {
 
 const defaultOptions: WithPlaywrightOptions = {
   launch: ({ executablePath: { macOS } }) => ({ product: 'chrome', executablePath: macOS }),
-  defaultUrl: 'http://localhost:3000',
+  defaultUrl: 'http://localhost:5173',
 }
 
 export type PlaywrightContext = {

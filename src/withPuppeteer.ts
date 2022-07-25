@@ -8,7 +8,7 @@ export type WithPuppeteerOptions = {
 
 const defaultOptions: WithPuppeteerOptions = {
   launch: ({ executablePath: { macOS } }) => ({ product: 'chrome', executablePath: macOS }),
-  defaultUrl: 'http://localhost:3000',
+  defaultUrl: 'http://localhost:5173',
 }
 
 export type PuppeteerContext = {
