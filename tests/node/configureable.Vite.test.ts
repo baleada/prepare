@@ -111,6 +111,14 @@ suite(`configures pages`, context => {
   assert.is(value.plugins.length, 1)
 })
 
+suite(`configures inspect`, context => {
+  const value = new Configureable()
+          .inspect()
+          .configure()
+
+  assert.is(value.plugins.length, 1)
+})
+
 suite(`configures resolve`, context => {
   const value = new Configureable()
           .resolve()
