@@ -28,8 +28,8 @@ const withLogging = (command: string) => {
 }
 
 console.log(`updating ${deps.length} dependencies`)
-withLogging(`npm install --save ${deps.map(dep => `${dep}@latest`).join(' ')}`)
+withLogging(`npm install --save --force --legacy-deps ${deps.map(dep => `${dep}@latest`).join(' ')}`)
 
 
 console.log(`updating ${devDeps.length} dev dependencies`)
-withLogging(`npm install --save-dev ${devDeps.map(dep => `${dep}@latest`).join(' ')}`)
+withLogging(`npm install --save-dev --force --legacy-deps ${devDeps.map(dep => `${dep}@latest`).join(' ')}`)

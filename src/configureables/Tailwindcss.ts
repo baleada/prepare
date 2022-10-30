@@ -2,9 +2,10 @@
 import { getLinearNumeric } from '@baleada/tailwind-linear-numeric'
 import * as themeUtils from '@baleada/tailwind-theme-utils'
 import forms from '@tailwindcss/forms'
-import typography from '@tailwindcss/typography'
-import lineClamp from '@tailwindcss/line-clamp'
 import aspectRatio from '@tailwindcss/aspect-ratio'
+import containerQueries from '@tailwindcss/container-queries'
+import lineClamp from '@tailwindcss/line-clamp'
+import typography from '@tailwindcss/typography'
 import defaultConfig from 'tailwindcss/defaultConfig'
 import colors from 'tailwindcss/colors'
 import createPlugin from 'tailwindcss/plugin'
@@ -19,7 +20,7 @@ export class Tailwindcss {
     this.plugin = createPluginMethod(this.addPlugin.bind(this))
   }
 
-  private addPlugin (plugin: ReturnType<typeof createPlugin>) {
+  private addPlugin (plugin: Config['plugins'][0]) {
     this.config.plugins = [
       ...(this.config.plugins ?? []),
       plugin
@@ -68,7 +69,7 @@ export class Tailwindcss {
   }
 
   forms () {
-    return this.plugin(forms as unknown as ReturnType<typeof createPlugin>)
+    return this.plugin(forms)
   }
 
   typography () {
@@ -82,6 +83,11 @@ export class Tailwindcss {
   aspectRatio () {
     return this.plugin(aspectRatio)
   }
+
+  containerQueries () {
+    return this.plugin(containerQueries)
+  }
+
   // baleadaComponents () {
   //   this.plugin(baleadaComponents)
   // }
@@ -104,12 +110,12 @@ function ensureTheme ({ themeRaw, currentConfig }: { themeRaw: Config['theme'] |
 
 
 type PluginMethod = {
-  (plugin: ReturnType<typeof createPlugin>): Tailwindcss,
+  (plugin: Config['plugins'][0]): Tailwindcss,
   custom: (plugin: Parameters<typeof createPlugin>[0]) => Tailwindcss
 }
 
-function createPluginMethod (addPlugin: (plugin: ReturnType<typeof createPlugin>) => Tailwindcss): PluginMethod {
-  function plugin (plugin: ReturnType<typeof createPlugin>) {
+function createPluginMethod (addPlugin: (plugin: Config['plugins'][0]) => Tailwindcss): PluginMethod {
+  function plugin (plugin: Config['plugins'][0]) {
     return addPlugin(plugin)
   }
 

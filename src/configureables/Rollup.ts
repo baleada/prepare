@@ -47,6 +47,7 @@ export class Rollup {
   }
 
   private addVirtual (options?: VirtualOptions) {
+    // @ts-expect-error
     return this.plugin(pluginVirtual(options))
   }
 
@@ -92,6 +93,7 @@ export class Rollup {
     return this.plugin(analyzer(options))
   }
   sourceTransform (options?: SourceTransformOptions) {
+    // @ts-expect-error
     return this.plugin(sourceTransform(options))
   }
   typescript (options?: TypescriptOptions) {
@@ -101,7 +103,9 @@ export class Rollup {
     return this.plugin(esbuild(options))
   }
   dts (options?: DtsOptions) {
-    return this.plugin(dts(options))
+    // @ts-expect-error
+    const fn = typeof dts === 'function' ? dts : dts.default
+    return this.plugin(fn(options))
   }
 
   toBabelConfig ({ target, format }: { target: 'node' | 'browser', format: 'esm' | 'cjs' }): RollupBabelInputPluginOptions {

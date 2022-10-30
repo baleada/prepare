@@ -138,4 +138,12 @@ suite(`configures aspectRatio plugin`, () => {
   assert.is(value.plugins.length, 1)
 })
 
+suite(`configures containerQueries plugin`, () => {
+  const value = new Configureable()
+          .containerQueries()
+          .configure()
+
+  assert.is(value.plugins.length, 1)
+})
+
 suite.run()
