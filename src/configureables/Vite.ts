@@ -1,5 +1,6 @@
 import { resolve } from 'path'
 import { Rollup } from './Rollup'
+import { toFn } from '../toFn'
 import vue from '@vitejs/plugin-vue'
 import type { Options as VueOptions } from '@vitejs/plugin-vue'
 import react from '@vitejs/plugin-react'
@@ -78,19 +79,19 @@ export class Vite {
   }
 
   vue (options?: VueOptions) {
-    return this.plugin(vue(options))
+    return this.plugin(toFn(vue)(options))
   }
   
   react (options?: ReactOptions) {
-    return this.plugin(react(options))
+    return this.plugin(toFn(react)(options))
   }
   
   pages (options?: PagesOptions) {
-    return this.plugin(pages(options))
+    return this.plugin(toFn(pages)(options))
   }
 
   inspect (options?: InspectOptions) {
-    return this.plugin(inspect(options))
+    return this.plugin(toFn(inspect)(options))
   }
 
   resolve (options?: ResolveOptions) {

@@ -1,4 +1,4 @@
-import path from 'path'
+import { toFn } from '../toFn'
 import { babel } from '@rollup/plugin-babel'
 import type { RollupBabelInputPluginOptions } from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
@@ -47,7 +47,7 @@ export class Rollup {
   }
 
   private addVirtual (options?: VirtualOptions) {
-    return this.plugin(pluginVirtual(options))
+    return this.plugin(toFn(pluginVirtual)(options))
   }
 
   configure () {
@@ -71,39 +71,37 @@ export class Rollup {
     return this
   }
   resolve (options?: ResolveOptions) {
-    return this.plugin(resolve(options))
+    return this.plugin(toFn(resolve)(options))
   }
   multiEntry (options?: any) {
-    return this.plugin(multiEntry(options))
+    return this.plugin(toFn(multiEntry)(options))
   }
   commonjs (options?: CommonJSOptions) {
-    return this.plugin(commonjs(options))
+    return this.plugin(toFn(commonjs)(options))
   }
   json (options?: JsonOptions) {
-    return this.plugin(json(options))
+    return this.plugin(toFn(json)(options))
   }
   vue (options?: VueOptions) {
-    return this.plugin(vue(options))
+    return this.plugin(toFn(vue)(options))
   }
   delete (options?: DeleteOptions) {
-    return this.plugin(del(options))
+    return this.plugin(toFn(del)(options))
   }
   analyzer (options?: AnalyzerOptions) {
-    return this.plugin(analyzer(options))
+    return this.plugin(toFn(analyzer)(options))
   }
   sourceTransform (options?: SourceTransformOptions) {
-    return this.plugin(sourceTransform(options))
+    return this.plugin(toFn(sourceTransform)(options))
   }
   typescript (options?: TypescriptOptions) {
-    return this.plugin(typescript(options))
+    return this.plugin(toFn(typescript)(options))
   }
   esbuild (options?: EsbuildOptions) {
-    return this.plugin(esbuild(options))
+    return this.plugin(toFn(esbuild)(options))
   }
   dts (options?: DtsOptions) {
-    // @ts-expect-error
-    const fn = typeof dts === 'function' ? dts : dts.default
-    return this.plugin(fn(options))
+    return this.plugin(toFn(dts)(options))
   }
 
   toBabelConfig ({ target, format }: { target: 'node' | 'browser', format: 'esm' | 'cjs' }): RollupBabelInputPluginOptions {
