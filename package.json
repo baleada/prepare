@@ -34,6 +34,7 @@
   },
   "homepage": "https://baleada.netlify.com",
   "devDependencies": {
+    "@vue/compiler-sfc": "^3.2.41",
     "esbuild": "^0.15.12",
     "esbuild-register": "^3.3.3",
     "tslib": "^2.4.0",
@@ -49,7 +50,7 @@
     "@baleada/markdown-it-spa-links": "^0.7.1",
     "@baleada/markdown-it-text-content": "^0.2.0",
     "@baleada/rollup-plugin-source-transform": "^0.5.1",
-    "@baleada/rollup-plugin-virtual": "^0.1.1",
+    "@baleada/rollup-plugin-virtual": "^0.1.2",
     "@baleada/tailwind-linear-numeric": "^0.12.0",
     "@baleada/tailwind-theme-utils": "^0.7.1",
     "@rollup/plugin-babel": "^6.0.2",
