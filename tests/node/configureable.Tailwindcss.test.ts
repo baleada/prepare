@@ -15,6 +15,17 @@ suite(`configures important`, () => {
   assert.equal(value, expected)
 })
 
+suite(`configures dark mode`, () => {
+  const value = new Configureable()
+          .darkMode('class')
+          .configure(),
+        expected = {
+          darkMode: 'class'
+        }
+  
+  assert.equal(value, expected)
+})
+
 suite(`configures content paths`, () => {
   const value = new Configureable()
           .content(['index.html'])

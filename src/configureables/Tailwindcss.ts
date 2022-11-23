@@ -38,6 +38,11 @@ export class Tailwindcss {
     return this
   }
 
+  darkMode (mode: Config['darkMode']) {
+    this.config.darkMode = mode
+    return this
+  }
+
   content (paths: string[]) {
     this.config.content = [
       ...((this.config.content as string[]) ?? []),
