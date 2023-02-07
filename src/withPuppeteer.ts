@@ -1,8 +1,9 @@
 import puppeteer from 'puppeteer-core'
+import type { LaunchOptions, Browser, Page } from 'puppeteer-core'
 import type { Test, Context } from 'uvu'
 
 export type WithPuppeteerOptions = {
-  launch?: puppeteer.LaunchOptions | ((api: WithPuppeteerLaunchApi) => puppeteer.LaunchOptions),
+  launch?: LaunchOptions | ((api: WithPuppeteerLaunchApi) => LaunchOptions),
   defaultUrl?: string,
 }
 
@@ -13,8 +14,8 @@ const defaultOptions: WithPuppeteerOptions = {
 
 export type PuppeteerContext = {
   puppeteer: {
-    browser: puppeteer.Browser,
-    page: puppeteer.Page,
+    browser: Browser,
+    page: Page,
     mouseClick: (selector: string) => void,
     tab: ({ direction, total }: { direction: 'forward' | 'backward', total: number }) => void,
     reloadNext: (url?: string ) => void,
@@ -90,7 +91,7 @@ const launchApi: WithPuppeteerLaunchApi = {
   }
 }
 
-function ensureLaunch (rawLaunch: WithPuppeteerOptions['launch']): puppeteer.LaunchOptions {
+function ensureLaunch (rawLaunch: WithPuppeteerOptions['launch']): LaunchOptions {
   return typeof rawLaunch === 'function'
     ? rawLaunch(launchApi)
     : rawLaunch
