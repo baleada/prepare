@@ -6,6 +6,7 @@ import aspectRatio from '@tailwindcss/aspect-ratio'
 import containerQueries from '@tailwindcss/container-queries'
 import lineClamp from '@tailwindcss/line-clamp'
 import typography from '@tailwindcss/typography'
+import { plugin as ancestorVariants, toTheme as toAncestorVariantsTheme } from '@baleada/tailwind-ancestor-variants'
 import defaultConfig from 'tailwindcss/defaultConfig'
 import colors from 'tailwindcss/colors'
 import createPlugin from 'tailwindcss/plugin'
@@ -52,23 +53,23 @@ export class Tailwindcss {
   }
 
   theme (themeOrGetTheme: Config['theme'] | ((api: GetThemeApi) => Config['theme'])) {
-    const ensuredTheme = ensureTheme({ themeRaw: themeOrGetTheme, currentConfig: this.config })
+    const narrowedTheme = narrowTheme({ theme: themeOrGetTheme, currentConfig: this.config })
 
     this.config.theme = {
       ...(this.config.theme ?? {}),
-      ...ensuredTheme,
+      ...narrowedTheme,
     }
     
     return this
   }
 
   extend (extendOrGetExtend: Config['theme']['extend'] | ((api: GetThemeApi) => Config['theme']['extend'])) {
-    const ensuredExtend = ensureTheme({ themeRaw: extendOrGetExtend, currentConfig: this.config })
+    const narrowedExtend = narrowTheme({ theme: extendOrGetExtend, currentConfig: this.config })
     
     return this.theme({
       extend: {
         ...((this.config.theme?.extend) ?? {}),
-        ...ensuredExtend,
+        ...narrowedExtend,
       }
     })
   }
@@ -93,6 +94,10 @@ export class Tailwindcss {
     return this.plugin(containerQueries)
   }
 
+  ancestorVariants () {
+    return this.plugin(ancestorVariants)
+  }
+
   // baleadaComponents () {
   //   this.plugin(baleadaComponents)
   // }
@@ -105,12 +110,25 @@ type GetThemeApi = {
   resolveConfig: typeof resolveConfig,
   themeUtils: typeof themeUtils,
   getLinearNumeric: typeof getLinearNumeric,
+  toTheme: {
+    ancestorVariants: typeof toAncestorVariantsTheme,
+  }
 }
 
-function ensureTheme ({ themeRaw, currentConfig }: { themeRaw: Config['theme'] | ((api: GetThemeApi) => Config['theme']), currentConfig: Partial<Config> }): Config['theme'] {
-  return typeof themeRaw === 'function'
-    ? themeRaw({ defaultConfig, currentConfig, colors, resolveConfig, themeUtils, getLinearNumeric })
-    : themeRaw
+function narrowTheme ({ theme, currentConfig }: { theme: Config['theme'] | ((api: GetThemeApi) => Config['theme']), currentConfig: Partial<Config> }): Config['theme'] {
+  return typeof theme === 'function'
+    ? theme({
+      defaultConfig,
+      currentConfig,
+      colors,
+      resolveConfig,
+      themeUtils,
+      getLinearNumeric,
+      toTheme: {
+        ancestorVariants: toAncestorVariantsTheme,
+      }
+    })
+    : theme
 }
 
 

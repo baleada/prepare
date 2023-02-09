@@ -157,4 +157,12 @@ suite(`configures containerQueries plugin`, () => {
   assert.is(value.plugins.length, 1)
 })
 
+suite(`configures ancestorVariants plugin`, () => {
+  const value = new Configureable()
+          .ancestorVariants()
+          .configure()
+
+  assert.is(value.plugins.length, 1)
+})
+
 suite.run()
