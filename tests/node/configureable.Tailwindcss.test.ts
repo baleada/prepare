@@ -111,7 +111,7 @@ suite(`configures plugins`, () => {
 suite(`configures custom plugins`, () => {
   const pluginStub = () => {}
   const value = new Configureable()
-          .plugin.custom(() => pluginStub)
+          .customPlugin(() => pluginStub)
           .configure()
 
   assert.is(value.plugins.length, 1)

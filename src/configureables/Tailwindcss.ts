@@ -7,6 +7,7 @@ import containerQueries from '@tailwindcss/container-queries'
 import lineClamp from '@tailwindcss/line-clamp'
 import typography from '@tailwindcss/typography'
 import { plugin as ancestorVariants, toTheme as toAncestorVariantsTheme } from '@baleada/tailwind-ancestor-variants'
+import type { AncestorVariantsOptions } from '@baleada/tailwind-ancestor-variants'
 import defaultConfig from 'tailwindcss/defaultConfig'
 import colors from 'tailwindcss/colors'
 import createPlugin from 'tailwindcss/plugin'
@@ -15,19 +16,8 @@ import resolveConfig from 'tailwindcss/resolveConfig'
 
 export class Tailwindcss {
   private config: Partial<Config>
-  plugin: PluginMethod
   constructor (config: Partial<Config> = {}) {
     this.config = config
-    this.plugin = createPluginMethod(this.addPlugin.bind(this))
-  }
-
-  private addPlugin (plugin: Config['plugins'][0]) {
-    this.config.plugins = [
-      ...(this.config.plugins ?? []),
-      plugin
-    ]
-
-    return this
   }
 
   configure () {
@@ -74,12 +64,12 @@ export class Tailwindcss {
     })
   }
 
-  forms () {
-    return this.plugin(forms)
+  forms (options?: Parameters<typeof forms>[0]) {
+    return this.plugin(forms(options))
   }
 
-  typography () {
-    return this.plugin(typography)
+  typography (options?: Parameters<typeof typography>[0]) {
+    return this.plugin(typography(options))
   }
 
   lineClamp () {
@@ -94,13 +84,22 @@ export class Tailwindcss {
     return this.plugin(containerQueries)
   }
 
-  ancestorVariants () {
-    return this.plugin(ancestorVariants)
+  ancestorVariants (options?: AncestorVariantsOptions) {
+    return this.plugin(ancestorVariants(options))
   }
 
-  // baleadaComponents () {
-  //   this.plugin(baleadaComponents)
-  // }
+  plugin (plugin: Config['plugins'][0]) {
+    this.config.plugins = [
+      ...(this.config.plugins ?? []),
+      plugin
+    ]
+
+    return this
+  }
+
+  customPlugin (plugin: Parameters<typeof createPlugin>[0]) {
+    return this.plugin(createPlugin(plugin))
+  }
 }
 
 type GetThemeApi = {
@@ -129,24 +128,4 @@ function narrowTheme ({ theme, currentConfig }: { theme: Config['theme'] | ((api
       }
     })
     : theme
-}
-
-
-type PluginMethod = {
-  (plugin: Config['plugins'][0]): Tailwindcss,
-  custom: (plugin: Parameters<typeof createPlugin>[0]) => Tailwindcss
-}
-
-function createPluginMethod (addPlugin: (plugin: Config['plugins'][0]) => Tailwindcss): PluginMethod {
-  function plugin (plugin: Config['plugins'][0]) {
-    return addPlugin(plugin)
-  }
-
-  function custom (customPlugin: Parameters<typeof createPlugin>[0]) {
-    return addPlugin(createPlugin(customPlugin))
-  }
-
-  plugin.custom = custom
-
-  return plugin
 }

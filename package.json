@@ -51,7 +51,7 @@
     "@baleada/markdown-it-text-content": "^0.2.0",
     "@baleada/rollup-plugin-source-transform": "^0.5.1",
     "@baleada/rollup-plugin-virtual": "^0.1.2",
-    "@baleada/tailwind-ancestor-variants": "^0.0.3",
+    "@baleada/tailwind-ancestor-variants": "^0.0.4",
     "@baleada/tailwind-linear-numeric": "^0.12.0",
     "@baleada/tailwind-theme-utils": "^0.7.1",
     "@rollup/plugin-babel": "^6.0.3",
