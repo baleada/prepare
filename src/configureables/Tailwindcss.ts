@@ -8,6 +8,8 @@ import lineClamp from '@tailwindcss/line-clamp'
 import typography from '@tailwindcss/typography'
 import { plugin as ancestorVariants, toTheme as toAncestorVariantsTheme } from '@baleada/tailwind-ancestor-variants'
 import type { AncestorVariantsOptions } from '@baleada/tailwind-ancestor-variants'
+import { plugin as utilities, toDimensionTheme, toStretchHeightTheme, toStretchWidthTheme } from '@baleada/tailwind-utilities'
+import type { UtilitiesOptions } from '@baleada/tailwind-utilities'
 import defaultConfig from 'tailwindcss/defaultConfig'
 import colors from 'tailwindcss/colors'
 import createPlugin from 'tailwindcss/plugin'
@@ -88,6 +90,10 @@ export class Tailwindcss {
     return this.plugin(ancestorVariants(options))
   }
 
+  utilities (options?: UtilitiesOptions) {
+    return this.plugin(utilities(options))
+  }
+
   plugin (plugin: Config['plugins'][0]) {
     this.config.plugins = [
       ...(this.config.plugins ?? []),
@@ -111,6 +117,9 @@ type GetThemeApi = {
   getLinearNumeric: typeof getLinearNumeric,
   toTheme: {
     ancestorVariants: typeof toAncestorVariantsTheme,
+    dimension: typeof toDimensionTheme,
+    stretchHeight: typeof toStretchHeightTheme,
+    stretchWidth: typeof toStretchWidthTheme,
   }
 }
 
@@ -125,6 +134,9 @@ function narrowTheme ({ theme, currentConfig }: { theme: Config['theme'] | ((api
       getLinearNumeric,
       toTheme: {
         ancestorVariants: toAncestorVariantsTheme,
+        dimension: toDimensionTheme,
+        stretchHeight: toStretchHeightTheme,
+        stretchWidth: toStretchWidthTheme,
       }
     })
     : theme

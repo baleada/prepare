@@ -54,6 +54,7 @@
     "@baleada/tailwind-ancestor-variants": "^0.0.4",
     "@baleada/tailwind-linear-numeric": "^0.12.0",
     "@baleada/tailwind-theme-utils": "^0.7.1",
+    "@baleada/tailwind-utilities": "^0.0.4",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-json": "^6.0.0",

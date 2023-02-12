@@ -165,4 +165,12 @@ suite(`configures ancestorVariants plugin`, () => {
   assert.is(value.plugins.length, 1)
 })
 
+suite(`configures utilities plugin`, () => {
+  const value = new Configureable()
+          .utilities()
+          .configure()
+
+  assert.is(value.plugins.length, 1)
+})
+
 suite.run()
