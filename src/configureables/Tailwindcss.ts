@@ -13,7 +13,7 @@ import type { UtilitiesOptions } from '@baleada/tailwind-utilities'
 import defaultConfig from 'tailwindcss/defaultConfig'
 import colors from 'tailwindcss/colors'
 import createPlugin from 'tailwindcss/plugin'
-import type { Config } from 'tailwindcss/types/config'
+import type { Config, PluginCreator } from 'tailwindcss/types/config'
 import resolveConfig from 'tailwindcss/resolveConfig'
 
 export class Tailwindcss {
@@ -103,7 +103,7 @@ export class Tailwindcss {
     return this
   }
 
-  customPlugin (plugin: (api: CustomPluginApi) => ReturnType<typeof createPlugin>) {
+  customPlugin (plugin: PreparePluginCreator) {
     return this.plugin(
       createPlugin(api => {
         const prefix = api.config('prefix') as string,
@@ -130,7 +130,8 @@ type GetThemeApi = {
   }
 }
 
-type CustomPluginApi = Parameters<Parameters<typeof createPlugin>[0]>[0] & {
+type PreparePluginCreator = (api: PreparePluginApi) => ReturnType<PluginCreator>
+type PreparePluginApi = Parameters<Parameters<typeof createPlugin>[0]>[0] & {
   apply: ReturnType<typeof createApply>
 }
 
