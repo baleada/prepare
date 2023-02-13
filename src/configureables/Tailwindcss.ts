@@ -8,7 +8,7 @@ import lineClamp from '@tailwindcss/line-clamp'
 import typography from '@tailwindcss/typography'
 import { plugin as ancestorVariants, toTheme as toAncestorVariantsTheme } from '@baleada/tailwind-ancestor-variants'
 import type { AncestorVariantsOptions } from '@baleada/tailwind-ancestor-variants'
-import { plugin as utilities, toDimensionTheme, toStretchHeightTheme, toStretchWidthTheme } from '@baleada/tailwind-utilities'
+import { plugin as utilities, toDimensionTheme, toStretchHeightTheme, toStretchWidthTheme, createApply } from '@baleada/tailwind-utilities'
 import type { UtilitiesOptions } from '@baleada/tailwind-utilities'
 import defaultConfig from 'tailwindcss/defaultConfig'
 import colors from 'tailwindcss/colors'
@@ -103,8 +103,15 @@ export class Tailwindcss {
     return this
   }
 
-  customPlugin (plugin: Parameters<typeof createPlugin>[0]) {
-    return this.plugin(createPlugin(plugin))
+  customPlugin (plugin: (api: CustomPluginApi) => ReturnType<typeof createPlugin>) {
+    return this.plugin(
+      createPlugin(api => {
+        const prefix = api.config('prefix') as string,
+              apply = createApply(prefix)
+        
+        return plugin({ ...api, apply })
+      })
+    )
   }
 }
 
@@ -121,6 +128,10 @@ type GetThemeApi = {
     stretchHeight: typeof toStretchHeightTheme,
     stretchWidth: typeof toStretchWidthTheme,
   }
+}
+
+type CustomPluginApi = Parameters<Parameters<typeof createPlugin>[0]>[0] & {
+  apply: ReturnType<typeof createApply>
 }
 
 function narrowTheme ({ theme, currentConfig }: { theme: Config['theme'] | ((api: GetThemeApi) => Config['theme']), currentConfig: Partial<Config> }): Config['theme'] {
