@@ -119,6 +119,14 @@ suite(`configures inspect`, context => {
   assert.is(value.plugins.length, 1)
 })
 
+suite(`configures lightningcss`, context => {
+  const value = new Configureable()
+          .lightningcss()
+          .configure()
+
+  assert.is(value.plugins.length, 1)
+})
+
 suite(`configures resolve`, context => {
   const value = new Configureable()
           .resolve()

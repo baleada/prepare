@@ -6,6 +6,7 @@ import type { Options as VueOptions } from '@vitejs/plugin-vue'
 import react from '@vitejs/plugin-react'
 import type { Options as ReactOptions } from '@vitejs/plugin-react'
 import pages from 'vite-plugin-pages'
+import lightningcss from 'vite-plugin-lightningcss'
 import inspect, { Options as InspectOptions } from 'vite-plugin-inspect'
 import type { UserOptions as PagesOptions } from 'vite-plugin-pages'
 import type { RollupNodeResolveOptions as ResolveOptions } from '@rollup/plugin-node-resolve'
@@ -92,6 +93,10 @@ export class Vite {
 
   inspect (options?: InspectOptions) {
     return this.plugin(toFn(inspect)(options))
+  }
+
+  lightningcss (options?: Parameters<typeof lightningcss>[0]) {
+    return this.plugin(toFn(lightningcss)(options))
   }
 
   resolve (options?: ResolveOptions) {
