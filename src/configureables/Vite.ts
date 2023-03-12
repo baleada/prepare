@@ -1,4 +1,3 @@
-import { resolve } from 'path'
 import { Rollup } from './Rollup'
 import { toFn } from '../toFn'
 import vue from '@vitejs/plugin-vue'
@@ -30,12 +29,9 @@ export class Vite {
     return this.config
   }
 
-  alias (aliasesOrConfigureAliases: AliasOptions | (({ resolve, basePath }: { resolve: Resolve, basePath: string }) => AliasOptions)) {
+  alias (aliases: AliasOptions) {
     this.config.resolve = {
-      alias: {
-        ...(this.config.resolve?.alias ?? {}),
-        ...ensureAliases(aliasesOrConfigureAliases),
-      }
+      alias: aliases,
     }
 
     return this
@@ -135,11 +131,4 @@ function createVirtualMethod (plugin: (plugin: PluginOption) => Vite): VirtualMe
   }
   
   return virtual
-}
-
-type Resolve = typeof resolve
-function ensureAliases (rawAliases: AliasOptions | (({ resolve, basePath }: { resolve: Resolve, basePath: string }) => AliasOptions)): AliasOptions {
-  return typeof rawAliases === 'function'
-    ? rawAliases({ resolve, basePath: resolve('') })
-    : rawAliases
 }

@@ -21,22 +21,6 @@ suite(`configures aliases`, () => {
   assert.equal(value, expected)
 })
 
-suite(`configures aliases via the configureAliases closure`, () => {
-  let value = new Configureable()
-        .alias(api => ({ stub: api.basePath }))
-        .configure(),
-      expected = {
-        resolve: {
-          alias: {
-            stub: resolve('')
-          }
-        }
-      }
-  
-  assert.equal(value, expected)
-  
-})
-
 suite(`includes deps`, () => {
   const value = new Configureable()
           .includeDeps(['stub'])
