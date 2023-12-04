@@ -39,6 +39,32 @@ suite(`configures content paths`, () => {
   assert.equal(value, expected)
 })
 
+suite(`configures future`, () => {
+  {
+    const value = new Configureable()
+            .future('all')
+            .configure(),
+          expected = {
+            future: 'all'
+          }
+    
+    assert.equal(value, expected)
+  }
+
+  {
+    const value = new Configureable()
+            .future({ hoverOnlyWhenSupported: true })
+            .configure(),
+          expected = {
+            future: {
+              hoverOnlyWhenSupported: true
+            }
+          }
+
+    assert.equal(value, expected)
+  }
+})
+
 suite(`configures theme`, () => {
   const value = new Configureable()
           .theme({ spacing: { 'stub': 'stub' } })

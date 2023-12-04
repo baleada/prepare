@@ -13,7 +13,7 @@ import type { UtilitiesOptions } from '@baleada/tailwind-utilities'
 import defaultConfig from 'tailwindcss/defaultConfig'
 import colors from 'tailwindcss/colors'
 import createPlugin from 'tailwindcss/plugin'
-import type { Config, PluginCreator } from 'tailwindcss/types/config'
+import type { Config, PluginCreator, FutureConfig } from 'tailwindcss/types/config'
 import resolveConfig from 'tailwindcss/resolveConfig'
 
 export class Tailwindcss {
@@ -38,9 +38,18 @@ export class Tailwindcss {
 
   content (paths: string[]) {
     this.config.content = [
-      ...((this.config.content as string[]) ?? []),
+      ...(this.config.content as string[] ?? []),
       ...paths,
     ]
+    return this
+  }
+
+  future (config: FutureConfig) {
+    this.config.future = typeof config === 'string' ? config : {
+      ...(typeof this.config.future === 'string' ? {} : this.config.future),
+      ...config,
+    }
+
     return this
   }
 
@@ -48,7 +57,7 @@ export class Tailwindcss {
     const narrowedTheme = narrowTheme({ theme: themeOrGetTheme, currentConfig: this.config })
 
     this.config.theme = {
-      ...(this.config.theme ?? {}),
+      ...this.config.theme,
       ...narrowedTheme,
     }
     
@@ -60,7 +69,7 @@ export class Tailwindcss {
     
     return this.theme({
       extend: {
-        ...((this.config.theme?.extend) ?? {}),
+        ...this.config.theme?.extend,
         ...narrowedExtend,
       }
     })
