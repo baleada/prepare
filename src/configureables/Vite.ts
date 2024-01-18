@@ -2,6 +2,8 @@ import { Rollup } from './Rollup'
 import { toFn } from '../toFn'
 import vue from '@vitejs/plugin-vue'
 import type { Options as VueOptions } from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import type { Options as VueJsxOptions } from '@vitejs/plugin-vue-jsx'
 import react from '@vitejs/plugin-react'
 import type { Options as ReactOptions } from '@vitejs/plugin-react'
 import pages from 'vite-plugin-pages'
@@ -77,6 +79,10 @@ export class Vite {
 
   vue (options?: VueOptions) {
     return this.plugin(toFn(vue)(options))
+  }
+
+  vueJsx (options?: VueJsxOptions) {
+    return this.plugin(toFn(vueJsx)(options))
   }
   
   react (options?: ReactOptions) {

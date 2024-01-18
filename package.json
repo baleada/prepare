@@ -73,6 +73,7 @@
     "@types/refractor": "^3.4.0",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitejs/plugin-vue": "^5.0.1",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
     "autoprefixer": "^10.4.16",
     "markdown-it": "^14.0.0",
     "markdown-it-link-attributes": "^4.0.1",
