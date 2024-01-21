@@ -87,6 +87,26 @@ suite(`configures vue jsx`, context => {
   assert.is(value.plugins.length, 1)
 })
 
+suite(`configures vue macros`, context => {
+  const value = new Configureable()
+          .vueMacros()
+          .configure()
+
+  assert.is(value.plugins.length, 1)
+})
+
+suite(`when configuring vue macros, nests vue and vue jsx inside vue macros`, context => {
+  const value = new Configureable()
+          .vue()
+          .vueJsx()
+          .vueMacros()
+          .configure()
+
+  assert.is(value.plugins.length, 1)
+  assert.ok(value.plugins[0].find(plugin => plugin.name === 'vite:vue'))
+  assert.ok(value.plugins[0].find(plugin => plugin.name === 'vite:vue-jsx'))
+})
+
 suite(`configures react`, context => {
   const value = new Configureable()
           .react()

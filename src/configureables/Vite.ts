@@ -1,5 +1,7 @@
 import { Rollup } from './Rollup'
 import { toFn } from '../toFn'
+import vueMacros from 'unplugin-vue-macros/vite'
+import type { Options as VueMacrosOptions } from 'unplugin-vue-macros'
 import vue from '@vitejs/plugin-vue'
 import type { Options as VueOptions } from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -28,6 +30,9 @@ export class Vite {
   }
 
   configure () {
+    this.configureVue()
+    this.configureVueJsx()
+    this.configureVueMacros()
     return this.config
   }
 
@@ -77,12 +82,47 @@ export class Vite {
     return this
   }
 
+  private configuresVue = false
+  private vueOptions: VueOptions
   vue (options?: VueOptions) {
-    return this.plugin(toFn(vue)(options))
+    this.configuresVue = true
+    this.vueOptions = options
+    return this
+  }
+  private configureVue () {
+    if (!this.configuresVue || this.configuresVueMacros) return 
+    this.plugin(toFn(vue)(this.vueOptions))
   }
 
+  private configuresVueJsx = false
+  private vueJsxOptions: VueJsxOptions
   vueJsx (options?: VueJsxOptions) {
-    return this.plugin(toFn(vueJsx)(options))
+    this.configuresVueJsx = true
+    this.vueJsxOptions = options
+    return this
+  }
+  private configureVueJsx () {
+    if (!this.configuresVueJsx || this.configuresVueMacros) return
+    this.plugin(toFn(vueJsx)(this.vueJsxOptions))
+  }
+
+  private configuresVueMacros = false
+  private vueMacrosOptions: VueMacrosOptions
+  vueMacros (options?: Omit<VueMacrosOptions, 'plugins'>) {
+    this.configuresVueMacros = true
+    this.vueMacrosOptions = options
+    return this
+  }
+  private configureVueMacros () {
+    if (!this.configuresVueMacros) return
+    this.plugin(toFn(vueMacros)({
+      ...this.vueMacrosOptions,
+      plugins: {
+        ...this.vueMacrosOptions?.plugins,
+        vue: this.configuresVue ? toFn(vue)(this.vueOptions) : undefined,
+        vueJsx: this.configuresVueJsx ? toFn(vueJsx)(this.vueJsxOptions) : undefined,
+      }
+    }))
   }
   
   react (options?: ReactOptions) {
