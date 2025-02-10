@@ -32,6 +32,7 @@ import type {
   OutputOptions,
   ExternalOption,
   Plugin,
+  TreeshakingOptions,
 } from 'rollup'
 import type { Icon } from '../getIcons'
 
@@ -41,7 +42,7 @@ import type { Icon } from '../getIcons'
 export class Rollup {
   private config: RollupOptions
   virtual: VirtualMethod
-  constructor (config = {}) {
+  constructor (config: RollupOptions = {}) {
     this.config = config
     this.virtual = createVirtualMethod(this.addVirtual.bind(this))
   }
@@ -54,6 +55,19 @@ export class Rollup {
     return this.config
   }
 
+  treeshake (treeshake: RollupOptions['treeshake']) {
+    this.config.treeshake = (
+      [treeshake, this.config.treeshake].some(
+        config => ['string', 'boolean'].includes(typeof config)
+      )
+        ? treeshake
+        : {
+          ...(this.config.treeshake as TreeshakingOptions),
+          ...(treeshake as TreeshakingOptions)
+        }
+    )
+    return this
+  }
   input (option: InputOption) {
     this.config.input = option
     return Array.isArray(option) ? this.multiEntry() : this

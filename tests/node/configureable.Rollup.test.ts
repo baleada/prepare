@@ -17,6 +17,33 @@ import {
 
 const suite = createSuite('configureable.Rollup')
 
+suite(`configures treeshake boolean`, () => {
+  const value = new Configureable()
+    .treeshake(true)
+    .treeshake(false)
+    .configure()
+
+  assert.is(value.treeshake, false)
+})
+
+suite(`configures treeshake string`, () => {
+  const value = new Configureable()
+    .treeshake('safest')
+    .treeshake('smallest')
+    .configure()
+
+  assert.is(value.treeshake, 'smallest')
+})
+
+suite(`configures treeshake object`, () => {
+  const value = new Configureable()
+    .treeshake({ moduleSideEffects: false })
+    .treeshake({ propertyReadSideEffects: true })
+    .configure()
+
+  assert.equal(value.treeshake, { moduleSideEffects: false, propertyReadSideEffects: true })
+})
+
 suite(`configures single input`, () => {
   const value1 = new Configureable()
           .input('index.ts')
