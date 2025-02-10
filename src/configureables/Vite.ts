@@ -1,25 +1,24 @@
-import { Rollup } from './Rollup'
-import { toFn } from '../toFn'
-import vueMacros from 'unplugin-vue-macros/vite'
-import type { Options as VueMacrosOptions } from 'unplugin-vue-macros'
-import vue from '@vitejs/plugin-vue'
-import type { Options as VueOptions } from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import type { Options as VueJsxOptions } from '@vitejs/plugin-vue-jsx'
-import react from '@vitejs/plugin-react'
-import type { Options as ReactOptions } from '@vitejs/plugin-react'
-import pages from 'vite-plugin-pages'
-import lightningcss from 'vite-plugin-lightningcss'
-import inspect, { Options as InspectOptions } from 'vite-plugin-inspect'
-import type { UserOptions as PagesOptions } from 'vite-plugin-pages'
-import type { RollupNodeResolveOptions as ResolveOptions } from '@rollup/plugin-node-resolve'
 import type { Options as VirtualOptions } from '@baleada/rollup-plugin-virtual'
+import type { RollupNodeResolveOptions as ResolveOptions } from '@rollup/plugin-node-resolve'
+import type { Options as ReactOptions } from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react'
+import type { Options as VueOptions } from '@vitejs/plugin-vue'
+import vue from '@vitejs/plugin-vue'
+import type { Options as VueJsxOptions } from '@vitejs/plugin-vue-jsx'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import type { Options as VueMacrosOptions } from 'unplugin-vue-macros'
+import vueMacros from 'unplugin-vue-macros/vite'
 import type {
-  UserConfig,
   AliasOptions,
   BuildOptions,
   PluginOption,
+  UserConfig,
 } from 'vite'
+import lightningcss from 'vite-plugin-lightningcss'
+import type { UserOptions as PagesOptions } from 'vite-plugin-pages'
+import pages from 'vite-plugin-pages'
+import { toFn } from '../toFn'
+import { Rollup } from './Rollup'
 
 export class Vite {
   private config: UserConfig & BuildOptions
@@ -131,10 +130,6 @@ export class Vite {
   
   pages (options?: PagesOptions) {
     return this.plugin(toFn(pages)(options))
-  }
-
-  inspect (options?: InspectOptions) {
-    return this.plugin(toFn(inspect)(options))
   }
 
   lightningcss (options?: Parameters<typeof lightningcss>[0]) {

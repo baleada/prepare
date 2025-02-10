@@ -121,8 +121,6 @@ export class Rollup {
   toBabelConfig ({ target, format }: { target: 'node' | 'browser', format: 'esm' | 'cjs' }): RollupBabelInputPluginOptions {
     const sharedConfig: RollupBabelInputPluginOptions = {
       plugins: [
-        '@babel/plugin-transform-nullish-coalescing-operator',
-        '@babel/plugin-transform-optional-chaining',
         [
           '@babel/plugin-transform-runtime',
           { useESModules: format === 'esm' }

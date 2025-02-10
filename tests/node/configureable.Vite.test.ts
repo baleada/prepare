@@ -95,7 +95,7 @@ suite(`configures vue macros`, context => {
   assert.is(value.plugins.length, 1)
 })
 
-suite(`when configuring vue macros, nests vue and vue jsx inside vue macros`, context => {
+suite(`when configuring vue macros, nests vue and vue jsx inside vue macros`, async context => {
   const value = new Configureable()
           .vue()
           .vueJsx()
@@ -103,8 +103,11 @@ suite(`when configuring vue macros, nests vue and vue jsx inside vue macros`, co
           .configure()
 
   assert.is(value.plugins.length, 1)
-  assert.ok(value.plugins[0].find(plugin => plugin.name === 'vite:vue'))
-  assert.ok(value.plugins[0].find(plugin => plugin.name === 'vite:vue-jsx'))
+  
+  const plugins = await value.plugins[0]
+
+  assert.ok(plugins.find(plugin => plugin.name === 'vite:vue'))
+  assert.ok(plugins.find(plugin => plugin.name === 'vite:vue-jsx'))
 })
 
 suite(`configures react`, context => {
@@ -118,14 +121,6 @@ suite(`configures react`, context => {
 suite(`configures pages`, context => {
   const value = new Configureable()
           .pages()
-          .configure()
-
-  assert.is(value.plugins.length, 1)
-})
-
-suite(`configures inspect`, context => {
-  const value = new Configureable()
-          .inspect()
           .configure()
 
   assert.is(value.plugins.length, 1)
